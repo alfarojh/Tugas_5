@@ -68,7 +68,7 @@ public class MajorController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             majorService.getMessage(),
-                            majorService.getCurrentMajor()
+                            majorService.getCurrent()
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -84,7 +84,7 @@ public class MajorController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             majorService.getMessage(),
-                            majorService.getCurrentMajor()
+                            majorService.getCurrent()
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

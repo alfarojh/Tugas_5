@@ -19,7 +19,7 @@ public class Student {
     private int year;           // Angkatan
     @ManyToOne
     @JsonIgnoreProperties({"name", "studentList"})
-    private Major major;
+    private Major major;        // Jurusan
     @Column(name = "actived")
     private boolean isActive = true;   // Status aktif Mahasiswa
     @Column(name = "deleted")

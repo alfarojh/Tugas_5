@@ -7,6 +7,7 @@ import com.example.tugas5.repository.StudentCourseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,12 @@ public class QuizRecordService {
         return message;
     }
 
+    /**
+     * Menambahkan nilai kuis untuk mahasiswa berdasarkan mata kuliah.
+     *
+     * @param quizRecord    Nilai kuis yang akan ditambahkan.
+     * @return              True jika berhasil ditambahkan, dan false jika gagal.
+     */
     public boolean add(QuizRecord quizRecord) {
         if (quizRecord.getStudentCourse() == null) {
             message = "Input invalid.";
@@ -39,23 +46,35 @@ public class QuizRecordService {
             return false;
         } else {
             quizRecordInterface.save(quizRecord);
+            message = "Quiz added successfully.";
             quizRecord.setStudentCourse(studentCourseOptional.get());
             return true;
         }
     }
 
+    /**
+     * Mengembalikan daftar nilai.
+     *
+     * @return      Daftar nilai.
+     */
     public List<QuizRecord> quizRecordList() {
         return quizRecordInterface.findAll();
     }
 
+    /**
+     * Mengembalikan daftar nilai berdasarkan ID kuis.
+     *
+     * @param id    ID kuis.
+     * @return      Daftar nilai jika tersedia, jika tidak tersedia kembalikan null.
+     */
     public QuizRecord getQuizRecordById(long id) {
         Optional<QuizRecord> quizRecordOptional = quizRecordInterface.findById(id);
 
         if (quizRecordOptional.isPresent()) {
-            message = "StudentCourse ID Found.";
+            message = "Quiz ID Found.";
             return quizRecordOptional.get();
         } else {
-            message = "StudentCourse ID Not Found.";
+            message = "Quiz ID Not Found.";
             return null;
         }
     }

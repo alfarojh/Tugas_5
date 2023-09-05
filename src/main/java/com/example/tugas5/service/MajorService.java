@@ -13,17 +13,23 @@ import java.util.stream.Collectors;
 public class MajorService {
     @Autowired
     private MajorInterface majorInterface;
-    private Major currentMajor;
+    private Major current;      // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
     public String getMessage() {
         return message;
     }
 
-    public Major getCurrentMajor() {
-        return currentMajor;
+    public Major getCurrent() {
+        return current;
     }
 
+    /**
+     * Menambahkan Jurusan baru.
+     *
+     * @param major Jurusan yang akan ditambahkan.
+     * @return      True jika berhasil ditambahkan, dan false jika gagal.
+     */
     public boolean add(Major major) {
         if (major.getName() != null && isNameValid(major.getName())) {
             majorInterface.save(major);
@@ -35,9 +41,16 @@ public class MajorService {
         }
     }
 
+    /**
+     * Memperbarui informasi Jurusan yang ada berdasarkan ID Jurusan.
+     *
+     * @param id    ID Jurusan yang akan diperbarui.
+     * @param major Informasi Jurusan yang ingin diperbarui.
+     * @return      True jika berhasil diperbarui, dan false jika gagal.
+     */
     public boolean updateData(Long id, Major major) {
         Optional<Major> majorOptional = majorInterface.findById(id);
-        currentMajor = null;
+        current = null;
 
         if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
             message = "Major ID Not Found.";
@@ -49,14 +62,20 @@ public class MajorService {
             majorOptional.get().setName(major.getName());
             majorInterface.save(majorOptional.get());
             message = "Major with ID `" + id + "` updated successfully.";
-            currentMajor = majorOptional.get();
+            current = majorOptional.get();
             return true;
         }
     }
 
+    /**
+     * Menghapus Jurusan.
+     *
+     * @param id    ID Jurusan yang akan dihapus.
+     * @return      True jika berhasil dihapus, dan false jika gagal.
+     */
     public boolean delete(Long id) {
         Optional<Major> majorOptional = majorInterface.findById(id);
-        currentMajor = null;
+        current = null;
 
         if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
             message = "Major ID Not Found.";
@@ -65,17 +84,28 @@ public class MajorService {
             majorOptional.get().delete();
             majorInterface.save(majorOptional.get());
             message = "Major with ID `" + id + "` deleted successfully.";
-            currentMajor = majorOptional.get();
+            current = majorOptional.get();
             return true;
         }
     }
 
+    /**
+     * Mengembalikan daftar Jurusan yang masih tersedia.
+     *
+     * @return      Daftar Jurusan yang masih tersedia.
+     */
     public List<Major> majorList() {
         return majorInterface.findAll().stream()
                 .filter(Major::isExist)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Mengembalikan informasi Jurusan berdasarkan ID Jurusan.
+     *
+     * @param id    ID Jurusan.
+     * @return      Jurusan jika tersedia, jika tidak tersedia kembalikan null.
+     */
     public Major getMajorById(long id) {
         Optional<Major> majorOptional = majorInterface.findById(id);
         if (majorOptional.isPresent() && majorOptional.get().isExist()) {
@@ -87,6 +117,13 @@ public class MajorService {
         }
     }
 
+    /**
+     * Memeriksa apakah sebuah nama valid.
+     * Nama yang valid hanya mengandung huruf (a-z, A-Z), angka (0-9), dan spasi.
+     *
+     * @param name      Nama yang akan diperiksa.
+     * @return true     Jika nama valid, false jika tidak valid.
+     */
     private boolean isNameValid(String name) {
         return name.matches("[a-zA-Z0-9\\s]+");
     }

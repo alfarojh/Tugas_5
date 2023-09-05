@@ -69,7 +69,7 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             studentService.getMessage(),
-                            studentService.getCurrentStudent()
+                            studentService.getCurrent()
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -85,7 +85,7 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             studentService.getMessage(),
-                            studentService.getCurrentStudent()
+                            studentService.getCurrent()
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -101,7 +101,7 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             studentService.getMessage(),
-                            studentService.getCurrentStudent()
+                            studentService.getCurrent()
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

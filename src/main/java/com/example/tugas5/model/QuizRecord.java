@@ -16,12 +16,11 @@ public class QuizRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_quiz_record")
-    private long id;
+    private long id;                // ID Kuis
     @ManyToOne
-//    @JoinColumn(name = "id_student_course", referencedColumnName = "id_student_course")
     @JsonIgnoreProperties({"course", "student", "credit", "quizRecordList", "exam1", "exam2", "active"})
-    private StudentCourse studentCourse;
-    private Integer score;
+    private StudentCourse studentCourse;    // Relasi untuk nilai kuis Mahasiswa berdasarkan Mata Kuliah
+    private Integer score;                  // Nilai Kuis
 
     public QuizRecord() {
         // Do Nothing

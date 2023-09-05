@@ -23,7 +23,7 @@ public class Major {
     @Column(name = "deleted")
     private boolean isDeleted = false;  // Status terhapusnya jurusan
     @OneToMany(mappedBy = "major")
-    private List<Student> studentList;
+    private List<Student> studentList;  // Daftar Mahasiswa tiap Jurusan
 
     public Major() {
         // Do Nothing

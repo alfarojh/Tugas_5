@@ -20,7 +20,7 @@ public class StudentCourseService {
     private StudentInterface studentInterface;
     @Autowired
     private CourseInterface courseInterface;
-    private StudentCourse current;
+    private StudentCourse current;      // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
     public StudentCourse getCurrent() {
@@ -31,6 +31,12 @@ public class StudentCourseService {
         return message;
     }
 
+    /**
+     * Menambahkan Relasi Mahasiswa dan Mata Kuliah.
+     *
+     * @param studentCourse Relasi Mahasiswa dan Mata Kuliah yang akan ditambahkan.
+     * @return              True jika berhasil ditambahkan, dan false jika gagal.
+     */
     public boolean add(StudentCourse studentCourse) {
         if (studentCourse.getStudent() == null) {
             message = "Student NPM Not Found.";
@@ -59,6 +65,13 @@ public class StudentCourseService {
         }
     }
 
+    /**
+     * Memperbarui informasi Relasi Mahasiswa dan Mata Kuliah yang ada berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
+     *
+     * @param id            ID Relasi Mahasiswa dan Mata Kuliah yang akan diperbarui.
+     * @param studentCourse Informasi Relasi Mahasiswa dan Mata Kuliah yang ingin diperbarui.
+     * @return              True jika berhasil diperbarui, dan false jika gagal.
+     */
     public boolean updateData(long id, StudentCourse studentCourse) {
         Optional<StudentCourse> studentCourseOptional = studentCourseInterface.findById(id);
         current = null;
@@ -90,6 +103,13 @@ public class StudentCourseService {
         }
     }
 
+    /**
+     * Memperbarui status Relasi Mahasiswa dan Mata Kuliah yang ada berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
+     *
+     * @param id            ID Relasi Mahasiswa dan Mata Kuliah yang akan diperbarui.
+     * @param studentCourse Status Relasi Mahasiswa dan Mata Kuliah yang ingin diperbarui.
+     * @return              True jika berhasil diperbarui, dan false jika gagal.
+     */
     public boolean updateStatus(long id, StudentCourse studentCourse) {
         Optional<StudentCourse> studentCourseOptional = studentCourseInterface.findById(id);
         current = null;
@@ -110,10 +130,21 @@ public class StudentCourseService {
         }
     }
 
+    /**
+     * Mengembalikan daftar Relasi Mahasiswa dan Mata Kuliah.
+     *
+     * @return      Daftar Relasi Mahasiswa dan Mata Kuliah.
+     */
     public List<StudentCourse> studentCourseList() {
         return studentCourseInterface.findAll();
     }
 
+    /**
+     * Mengembalikan informasi Relasi Mahasiswa dan Mata Kuliah berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
+     *
+     * @param id    ID Relasi Mahasiswa dan Mata Kuliah.
+     * @return      Relasi Mahasiswa dan Mata Kuliah jika tersedia, jika tidak tersedia kembalikan null.
+     */
     public StudentCourse getStudentCourseById(long id) {
         Optional<StudentCourse> studentCourseOptional = studentCourseInterface.findById(id);
         if (studentCourseOptional.isPresent()) {

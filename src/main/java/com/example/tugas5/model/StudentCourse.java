@@ -19,20 +19,20 @@ public class StudentCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_student_course")
-    private long id;
+    private long id;        // ID relasi Mahasiswa dan Mata Kuliah
     @ManyToOne
     @JoinColumn(name = "npm_student", referencedColumnName = "npm")
-    private Student student;
+    private Student student;    // Mahasiswa
     @ManyToOne
     @JoinColumn(name = "id_course", referencedColumnName = "id_course")
-    private Course course;
-    private int credit;
+    private Course course;      // Jurusan
+    private int credit;         // Jumlah SKS
     @OneToMany(mappedBy = "studentCourse")
     @JsonIgnoreProperties({"id", "studentCourse"})
-    private List<QuizRecord> quizRecordList;
-    private Integer exam1;
-    private Integer exam2;
-    private boolean isActive;
+    private List<QuizRecord> quizRecordList;    // Daftar nilau kuis
+    private Integer exam1;      // Nilai ujian tengah semester
+    private Integer exam2;      // Nilai ujian akhir semester
+    private boolean isActive;   // Status aktif saat Mahasiswa sedang mengambil Mata Kuliah
 
     public StudentCourse() {
         // Do Nothing

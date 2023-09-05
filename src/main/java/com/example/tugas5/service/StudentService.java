@@ -18,25 +18,28 @@ public class StudentService {
     private StudentInterface studentInterface;
     @Autowired
     private MajorInterface majorInterface;
-    private Student currentStudent;
+    private Student current;    // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
     public String getMessage() {
         return message;
     }
 
-    public Student getCurrentStudent() {
-        return currentStudent;
+    public Student getCurrent() {
+        return current;
     }
 
+    /**
+     * Menambahkan Mahasiswa.
+     *
+     * @param student   Mahasiswa yang akan ditambahkan.
+     * @return          True jika berhasil ditambahkan, dan false jika gagal.
+     */
     public boolean add(Student student) {
-        currentStudent = null;
-        if (student.getMajor() == null ||
-                !majorInterface.existsById(student.getMajor().getId())) {
+        if (student.getMajor() == null || !majorInterface.existsById(student.getMajor().getId())) {
             message = "Major ID Not Found.";
             return false;
-        } else if (student.getName() == null ||
-                isNameNotValid(student.getName())) {
+        } else if (student.getName() == null || isNameNotValid(student.getName())) {
             message = "Input invalid.";
             return false;
         } else {
@@ -52,9 +55,16 @@ public class StudentService {
         }
     }
 
+    /**
+     * Memperbarui informasi Mahasiswa yang ada berdasarkan NPM Mahasiswa.
+     *
+     * @param npm       NPM Mahasiswa yang akan diperbarui.
+     * @param student   Informasi Mahasiswa yang ingin diperbarui.
+     * @return          True jika berhasil diperbarui, dan false jika gagal.
+     */
     public boolean updateData(String npm, Student student) {
         Optional<Student> studentOptional = studentInterface.findById(npm);
-        currentStudent = null;
+        current = null;
 
         if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
             message = "Student NPM Not Found.";
@@ -67,14 +77,21 @@ public class StudentService {
             studentOptional.get().setName(student.getName());
             studentInterface.save(studentOptional.get());
             message = "Student with NPM `" + npm + "` updated successfully.";
-            currentStudent = studentOptional.get();
+            current = studentOptional.get();
             return true;
         }
     }
 
+    /**
+     * Memperbarui status Mahasiswa yang ada berdasarkan NPM Mahasiswa.
+     *
+     * @param npm       NPM Mahasiswa yang akan diperbarui.
+     * @param student   Status Mahasiswa yang ingin diperbarui.
+     * @return          True jika berhasil diperbarui, dan false jika gagal.
+     */
     public boolean updateStatus(String npm, Student student) {
         Optional<Student> studentOptional = studentInterface.findById(npm);
-        currentStudent = null;
+        current = null;
 
         if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
             message = "Student NPM Not Found.";
@@ -82,7 +99,7 @@ public class StudentService {
         } else {
             studentOptional.get().setActive(student.isActive());
             studentInterface.save(studentOptional.get());
-            currentStudent = studentOptional.get();
+            current = studentOptional.get();
             if (student.isActive()) {
                 message = "Student NPM `" + npm + "` is now active.";
             } else {
@@ -92,9 +109,15 @@ public class StudentService {
         }
     }
 
+    /**
+     * Menghapus Mahasiswa dari dalam daftar.
+     *
+     * @param npm   NPM Mahasiswa yang akan dihapus.
+     * @return      True jika berhasil dihapus, dan false jika gagal.
+     */
     public boolean delete(String npm) {
         Optional<Student> studentOptional = studentInterface.findById(npm);
-        currentStudent = null;
+        current = null;
 
         if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
             message = "Student NPM Not Found.";
@@ -103,17 +126,28 @@ public class StudentService {
             studentOptional.get().delete();
             studentInterface.save(studentOptional.get());
             message = "Student with NPM `" + npm + "` deleted successfully.";
-            currentStudent = studentOptional.get();
+            current = studentOptional.get();
             return true;
         }
     }
 
+    /**
+     * Mengembalikan daftar Mahasiswa.
+     *
+     * @return      Daftar Mahasiswa.
+     */
     public List<Student> studentList() {
         return studentInterface.findAll().stream()
                 .filter(Student::isExist)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Mengembalikan informasi Mahasiswa berdasarkan NPM.
+     *
+     * @param npm   NPM Mahasiswa.
+     * @return      Mahasiswa jika tersedia, jika tidak tersedia kembalikan null.
+     */
     public Student getStudentByNpm(String npm) {
         Optional<Student> studentOptional = studentInterface.findById(npm);
         if (studentOptional.isPresent() && studentOptional.get().isExist()) {
@@ -140,6 +174,13 @@ public class StudentService {
         return String.format("%d%02d%04d", year, idMajor, count);
     }
 
+    /**
+     * Memeriksa apakah sebuah nama valid.
+     * Nama yang valid hanya mengandung huruf (a-z, A-Z), angka (0-9), dan spasi.
+     *
+     * @param name      Nama yang akan diperiksa.
+     * @return true     Jika nama valid, false jika tidak valid.
+     */
     private boolean isNameNotValid(String name) {
         return !name.matches("[a-zA-Z0-9\\s]+");
     }
