@@ -630,14 +630,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/student-course",
+							"raw": "http://localhost:8080/student-courses",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"student-course"
+								"student-courses"
 							]
 						}
 					},
@@ -649,14 +649,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/student-course/1",
+							"raw": "http://localhost:8080/student-courses/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"student-course",
+								"student-courses",
 								"1"
 							]
 						}
@@ -692,14 +692,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/student-course",
+							"raw": "http://localhost:8080/student-courses",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"student-course"
+								"student-courses"
 							]
 						},
 						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
@@ -735,14 +735,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/student-course/grade/2",
+							"raw": "http://localhost:8080/student-courses/grade/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"student-course",
+								"student-courses",
 								"grade",
 								"2"
 							]
@@ -780,14 +780,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/student-course/1/activated",
+							"raw": "http://localhost:8080/student-courses/1/activated",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"student-course",
+								"student-courses",
 								"1",
 								"activated"
 							]
@@ -861,7 +861,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"studentCourse\" : {\n        \"id\": 1\n    },\n    \"score\" : 80\n    \n    \n}",
+							"raw": "{\n    \"studentCourse\" : {\n        \"id\": 1\n    },\n    \"score\" : 100\n    \n    \n}",
 							"options": {
 								"raw": {
 									"language": "json"
