@@ -25,7 +25,7 @@ public class CourseService {
     }
 
     public boolean add(Course course) {
-        if (isNameValid(course.getName()) && course.getCredit() > 0) {
+        if (course.getName() != null && isNameValid(course.getName()) && course.getCredit() > 0) {
             courseInterface.save(course);
             message = "Course added successfully.";
             return true;
@@ -39,11 +39,11 @@ public class CourseService {
         Optional<Course> courseOptional = courseInterface.findById(id);
         currentCourse = null;
 
-        if (!courseOptional.isPresent()) {
+        if (!courseOptional.isPresent() || !courseOptional.get().isExist()) {
             message = "Course ID Not Found.";
             return false;
-        } else if (!isNameValid(course.getName()) || course.getCredit() <= 0) {
-            message = "Update failed.";
+        } else if (course.getName() == null || !isNameValid(course.getName()) || course.getCredit() <= 0) {
+            message = "Input invalid.";
             return false;
         } else {
             courseOptional.get().setName(course.getName());
@@ -59,7 +59,7 @@ public class CourseService {
         Optional<Course> courseOptional = courseInterface.findById(id);
         currentCourse = null;
 
-        if (!courseOptional.isPresent()) {
+        if (!courseOptional.isPresent() || !courseOptional.get().isExist()) {
             message = "Course ID Not Found.";
             return false;
         } else {
@@ -79,7 +79,7 @@ public class CourseService {
         Optional<Course> courseOptional = courseInterface.findById(id);
         currentCourse = null;
 
-        if (!courseOptional.isPresent()) {
+        if (!courseOptional.isPresent() || !courseOptional.get().isExist()) {
             message = "Course ID Not Found.";
             return false;
         } else {

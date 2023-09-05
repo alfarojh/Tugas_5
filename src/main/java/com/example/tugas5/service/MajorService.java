@@ -25,7 +25,7 @@ public class MajorService {
     }
 
     public boolean add(Major major) {
-        if (isNameValid(major.getName())) {
+        if (major.getName() != null && isNameValid(major.getName())) {
             majorInterface.save(major);
             message = "Major added successfully.";
             return true;
@@ -39,11 +39,11 @@ public class MajorService {
         Optional<Major> majorOptional = majorInterface.findById(id);
         currentMajor = null;
 
-        if (!majorOptional.isPresent()) {
+        if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
             message = "Major ID Not Found.";
             return false;
-        } else if (!isNameValid(major.getName())) {
-            message = "Update failed.";
+        } else if (major.getName() == null || !isNameValid(major.getName())) {
+            message = "Input invalid.";
             return false;
         } else {
             majorOptional.get().setName(major.getName());
@@ -58,7 +58,7 @@ public class MajorService {
         Optional<Major> majorOptional = majorInterface.findById(id);
         currentMajor = null;
 
-        if (!majorOptional.isPresent()) {
+        if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
             message = "Major ID Not Found.";
             return false;
         } else {

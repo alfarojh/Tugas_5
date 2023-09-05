@@ -33,6 +33,14 @@ public class StudentCourseService {
     }
 
     public boolean add(StudentCourse studentCourse) {
+        if (studentCourse.getStudent() == null) {
+            message = "Student NPM Not Found.";
+            return false;
+        } else if (studentCourse.getCourse() == null) {
+            message = "Course ID Not Found.";
+            return false;
+        }
+
         Optional<Student> studentOptional = studentInterface.findById(studentCourse.getStudent().getNpm());
         Optional<Course> courseOptional = courseInterface.findById(studentCourse.getCourse().getId());
 
@@ -59,10 +67,22 @@ public class StudentCourseService {
         if (!studentCourseOptional.isPresent()) {
             message = "StudentCourse ID Not Found.";
             return false;
-        } else {
-//            studentCourseOptional.get().setQuiz(studentCourse.getQuiz());
-            studentCourseOptional.get().setExam1(studentCourse.getExam1());
-            studentCourseOptional.get().setExam2(studentCourse.getExam2());
+        } else if (studentCourse.getExam1() != null &&
+                (studentCourse.getExam1() < 0 || studentCourse.getExam1() > 100)) {
+            message = "Input Invalid.";
+            return false;
+        } else if (studentCourse.getExam2() != null &&
+                (studentCourse.getExam2() < 0 || studentCourse.getExam2() > 100)) {
+            message = "Input Invalid.";
+            return false;
+        }
+        else {
+            if (studentCourseOptional.get().getExam1() == null) {
+                studentCourseOptional.get().setExam1(studentCourse.getExam1());
+            }
+            if (studentCourseOptional.get().getExam2() == null) {
+                studentCourseOptional.get().setExam2(studentCourse.getExam2());
+            }
 
             studentCourseInterface.save(studentCourseOptional.get());
             message = "StudentCourse with ID `" + id + "` updated successfully.";

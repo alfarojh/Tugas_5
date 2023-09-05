@@ -31,10 +31,12 @@ public class StudentService {
 
     public boolean add(Student student) {
         currentStudent = null;
-        if (!majorInterface.existsById(student.getMajor().getId())) {
-            message = "Student NPM Not Found.";
+        if (student.getMajor() == null ||
+                !majorInterface.existsById(student.getMajor().getId())) {
+            message = "Major ID Not Found.";
             return false;
-        } else if (isNameNotValid(student.getName())) {
+        } else if (student.getName() == null ||
+                isNameNotValid(student.getName())) {
             message = "Input invalid.";
             return false;
         } else {
@@ -54,11 +56,12 @@ public class StudentService {
         Optional<Student> studentOptional = studentInterface.findById(npm);
         currentStudent = null;
 
-        if (!studentOptional.isPresent()) {
+        if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
             message = "Student NPM Not Found.";
             return false;
-        } else if (isNameNotValid(student.getName())) {
-            message = "Update failed.";
+        } else if (student.getName() == null ||
+                isNameNotValid(student.getName())) {
+            message = "Input invalid.";
             return false;
         } else {
             studentOptional.get().setName(student.getName());
@@ -73,7 +76,7 @@ public class StudentService {
         Optional<Student> studentOptional = studentInterface.findById(npm);
         currentStudent = null;
 
-        if (!studentOptional.isPresent()) {
+        if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
             message = "Student NPM Not Found.";
             return false;
         } else {
@@ -93,7 +96,7 @@ public class StudentService {
         Optional<Student> studentOptional = studentInterface.findById(npm);
         currentStudent = null;
 
-        if (!studentOptional.isPresent()) {
+        if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
             message = "Student NPM Not Found.";
             return false;
         } else {
@@ -140,5 +143,4 @@ public class StudentService {
     private boolean isNameNotValid(String name) {
         return !name.matches("[a-zA-Z0-9\\s]+");
     }
-
 }
