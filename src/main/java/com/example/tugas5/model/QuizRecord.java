@@ -1,11 +1,12 @@
 package com.example.tugas5.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -17,7 +18,8 @@ public class QuizRecord {
     @Column(name = "id_quiz_record")
     private long id;
     @ManyToOne
-    @JoinColumn(name = "id_student_course", referencedColumnName = "id_student_course")
+//    @JoinColumn(name = "id_student_course", referencedColumnName = "id_student_course")
+    @JsonIgnoreProperties({"course", "student", "credit", "quizRecordList", "exam1", "exam2", "active"})
     private StudentCourse studentCourse;
     private Integer score;
 

@@ -1,7 +1,6 @@
 package com.example.tugas5.controller;
 
 import com.example.tugas5.model.ApiResponse;
-import com.example.tugas5.model.Major;
 import com.example.tugas5.model.QuizRecord;
 import com.example.tugas5.service.QuizRecordService;
 import org.springframework.beans.factory.annotation.Autowired;

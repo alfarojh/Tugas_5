@@ -2,15 +2,14 @@ package com.example.tugas5.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Id;
 import java.util.List;
 
 @Entity
@@ -23,7 +22,6 @@ public class Major {
     private String name;            // Nama Jurusan
     @Column(name = "deleted")
     private boolean isDeleted = false;  // Status terhapusnya jurusan
-    @JsonIgnore
     @OneToMany(mappedBy = "major")
     private List<Student> studentList;
 
@@ -41,6 +39,10 @@ public class Major {
 
     public void setName(String name) {
         this.name = name.trim();
+    }
+
+    public List<Student> getStudentList() {
+        return studentList;
     }
 
     @JsonIgnore

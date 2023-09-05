@@ -1,6 +1,5 @@
 package com.example.tugas5;
 
-import com.example.tugas5.service.MajorService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

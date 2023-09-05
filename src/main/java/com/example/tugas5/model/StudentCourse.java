@@ -1,5 +1,7 @@
 package com.example.tugas5.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,8 +27,9 @@ public class StudentCourse {
     @JoinColumn(name = "id_course", referencedColumnName = "id_course")
     private Course course;
     private int credit;
-//    @OneToMany(mappedBy = "student_course")
-//    private List<Integer> quiz;
+    @OneToMany(mappedBy = "studentCourse")
+    @JsonIgnoreProperties({"id", "studentCourse"})
+    private List<QuizRecord> quizRecordList;
     private Integer exam1;
     private Integer exam2;
     private boolean isActive;
@@ -38,6 +40,10 @@ public class StudentCourse {
 
     public long getId() {
         return id;
+    }
+
+    public List<QuizRecord> getQuizRecordList() {
+        return quizRecordList;
     }
 
     public Student getStudent() {

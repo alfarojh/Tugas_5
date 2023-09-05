@@ -1,13 +1,13 @@
 package com.example.tugas5.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Id;
 
 @Entity
 @Table(name = "student")
@@ -18,7 +18,7 @@ public class Student {
     private String name;        // Nama Mahasiswa
     private int year;           // Angkatan
     @ManyToOne
-    @JoinColumn(name = "id_major", referencedColumnName = "id_major")
+    @JsonIgnoreProperties({"name", "studentList"})
     private Major major;
     @Column(name = "actived")
     private boolean isActive = true;   // Status aktif Mahasiswa
