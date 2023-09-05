@@ -24,12 +24,12 @@ Bootcamp 4 September 2023 - Tugas 5 (Membuat API Universitas WGS menggunakan Jav
 * `DELETE http://localhost:8080/students/:npm`: Menghapus mahasiswa
 
 **API untuk Relasi antara Mahasiswa dan Mata Kuliah**
-* `GET http://localhost:8080/student-course`: Menampilkan semua list relasi
-* `GET http://localhost:8080/student-course/:id`: Menampilkan relasi berdasarkan id
-* `POST http://localhost:8080/student-course`: Membuat relasi baru
-* `PUT http://localhost:8080/student-course/grade/:id`: Memperbarui nilai ujian dalam relasi
-* `PATCH http://localhost:8080/student-course/:id/activated`: Memperbarui status relasi
-* `DELETE http://localhost:8080/student-course/:id`: Menghapus relasi
+* `GET http://localhost:8080/student-courses`: Menampilkan semua list relasi
+* `GET http://localhost:8080/student-courses/:id`: Menampilkan relasi berdasarkan id
+* `POST http://localhost:8080/student-courses`: Membuat relasi baru
+* `PUT http://localhost:8080/student-courses/grade/:id`: Memperbarui nilai ujian dalam relasi
+* `PATCH http://localhost:8080/student-courses/:id/activated`: Memperbarui status relasi
+* `DELETE http://localhost:8080/student-courses/:id`: Menghapus relasi
 
 **API untuk Nilai Kuis Mahasiswa Berdasarkan Mata Kuliah**
 * `GET http://localhost:8080/quiz-records`: Menampilkan semua list nilai
