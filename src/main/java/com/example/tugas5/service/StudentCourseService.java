@@ -56,7 +56,7 @@ public class StudentCourseService {
             message = "Course ID Not Found.";
             return false;
         } else {
-            studentCourseRequest.setCredit(courseRepository.getReferenceById(studentCourseRequest.getCourse().getId()).getCredit());
+            studentCourseRequest.setCredit(courseOptional.get().getCredit());
             studentCourseRepository.save(studentCourseRequest);
             studentCourseRequest.setStudent(studentOptional.get());
             studentCourseRequest.setCourse(courseOptional.get());
@@ -89,17 +89,27 @@ public class StudentCourseService {
             return false;
         }
         else {
-            if (studentCourseOptional.get().getExam1() == null) {
+            boolean isChange = false;
+            if (studentCourseOptional.get().getExam1() == null &&
+                    studentCourseRequest.getExam1() != null) {
                 studentCourseOptional.get().setExam1(studentCourseRequest.getExam1());
+                isChange = true;
             }
-            if (studentCourseOptional.get().getExam2() == null) {
+            if (studentCourseOptional.get().getExam2() == null &&
+                    studentCourseRequest.getExam2() != null) {
                 studentCourseOptional.get().setExam2(studentCourseRequest.getExam2());
+                isChange = true;
             }
 
-            studentCourseRepository.save(studentCourseOptional.get());
-            message = "StudentCourse with ID `" + id + "` updated successfully.";
             current = studentCourseOptional.get();
-            return true;
+            if (isChange) {
+                studentCourseRepository.save(studentCourseOptional.get());
+                message = "StudentCourse with ID `" + id + "` updated successfully.";
+                return true;
+            } else {
+                message = "StudentCourse with ID `" + id + "` cannot updated because value not change.";
+                return false;
+            }
         }
     }
 
