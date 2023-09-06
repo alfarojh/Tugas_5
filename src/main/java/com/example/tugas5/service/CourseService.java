@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -123,9 +122,7 @@ public class CourseService {
      * @return      Daftar Jurusan yang masih tersedia.
      */
     public List<Course> courseList() {
-        return courseRepository.findAll().stream()
-                .filter(Course::isExist)
-                .collect(Collectors.toList());
+        return courseRepository.findAllNotDeleted();
     }
 
     /**

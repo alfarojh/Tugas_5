@@ -39,10 +39,10 @@ public class StudentCourseService {
      */
     public boolean add(StudentCourse studentCourseRequest) {
         if (studentCourseRequest.getStudent() == null) {
-            message = "Student NPM Not Found.";
+            message = "Please insert student NPM.";
             return false;
         } else if (studentCourseRequest.getCourse() == null) {
-            message = "Course ID Not Found.";
+            message = "Please insert course ID.";
             return false;
         }
 
@@ -136,7 +136,7 @@ public class StudentCourseService {
      * @return      Daftar Relasi Mahasiswa dan Mata Kuliah.
      */
     public List<StudentCourse> studentCourseList() {
-        return studentCourseRepository.findAll();
+        return studentCourseRepository.findAllSorted();
     }
 
     /**

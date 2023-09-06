@@ -31,7 +31,7 @@ public class StudentCourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getStudentCourseById(@PathVariable int id) {
+    public ResponseEntity getStudentCourseById(@PathVariable long id) {
         if (studentCourseService.getStudentCourseById(id) != null) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
@@ -63,7 +63,7 @@ public class StudentCourseController {
     }
 
     @PutMapping("/grade/{id}")
-    public ResponseEntity updateDataStudentCourse(@PathVariable int id, @RequestBody StudentCourse studentCourseRequest) {
+    public ResponseEntity updateDataStudentCourse(@PathVariable long id, @RequestBody StudentCourse studentCourseRequest) {
         if (studentCourseService.updateData(id, studentCourseRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
@@ -77,7 +77,7 @@ public class StudentCourseController {
     }
 
     @PatchMapping("/{id}/activated")
-    public ResponseEntity updateActiveStudentCourse(@PathVariable int id, @RequestBody StudentCourse studentCourseRequest) {
+    public ResponseEntity updateActiveStudentCourse(@PathVariable long id, @RequestBody StudentCourse studentCourseRequest) {
         if (studentCourseService.updateStatus(id, studentCourseRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(

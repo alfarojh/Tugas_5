@@ -57,7 +57,7 @@ public class QuizRecordService {
      * @return      Daftar nilai.
      */
     public List<QuizRecord> quizRecordList() {
-        return quizRecordRepository.findAll();
+        return quizRecordRepository.findAllSorted();
     }
 
     /**

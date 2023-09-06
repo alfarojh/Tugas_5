@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -137,9 +136,7 @@ public class StudentService {
      * @return      Daftar Mahasiswa.
      */
     public List<Student> studentList() {
-        return studentRepository.findAll().stream()
-                .filter(Student::isExist)
-                .collect(Collectors.toList());
+        return studentRepository.findAllNotDeleted();
     }
 
     /**

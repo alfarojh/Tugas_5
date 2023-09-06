@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MajorService {
@@ -95,9 +94,7 @@ public class MajorService {
      * @return      Daftar Jurusan yang masih tersedia.
      */
     public List<Major> majorList() {
-        return majorRepository.findAll().stream()
-                .filter(Major::isExist)
-                .collect(Collectors.toList());
+        return majorRepository.findAllNotDeleted();
     }
 
     /**
