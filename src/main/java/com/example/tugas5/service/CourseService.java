@@ -1,7 +1,7 @@
 package com.example.tugas5.service;
 
 import com.example.tugas5.model.Course;
-import com.example.tugas5.repository.CourseInterface;
+import com.example.tugas5.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class CourseService {
     @Autowired
-    private CourseInterface courseInterface;
+    private CourseRepository courseRepository;
     private Course current;     // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
@@ -32,7 +32,7 @@ public class CourseService {
      */
     public boolean add(Course course) {
         if (course.getName() != null && isNameValid(course.getName()) && course.getCredit() > 0) {
-            courseInterface.save(course);
+            courseRepository.save(course);
             message = "Course added successfully.";
             return true;
         } else {
@@ -49,7 +49,7 @@ public class CourseService {
      * @return          True jika berhasil diperbarui, dan false jika gagal.
      */
     public boolean updateData(Long id, Course course) {
-        Optional<Course> courseOptional = courseInterface.findById(id);
+        Optional<Course> courseOptional = courseRepository.findById(id);
         current = null;
 
         if (!courseOptional.isPresent() || !courseOptional.get().isExist()) {
@@ -61,7 +61,7 @@ public class CourseService {
         } else {
             courseOptional.get().setName(course.getName());
             courseOptional.get().setCredit(course.getCredit());
-            courseInterface.save(courseOptional.get());
+            courseRepository.save(courseOptional.get());
             message = "Course with ID `" + id + "` updated successfully.";
             current = courseOptional.get();
             return true;
@@ -76,7 +76,7 @@ public class CourseService {
      * @return          True jika berhasil diperbarui, dan false jika gagal.
      */
     public boolean updateStatus(long id, Course course) {
-        Optional<Course> courseOptional = courseInterface.findById(id);
+        Optional<Course> courseOptional = courseRepository.findById(id);
         current = null;
 
         if (!courseOptional.isPresent() || !courseOptional.get().isExist()) {
@@ -84,7 +84,7 @@ public class CourseService {
             return false;
         } else {
             courseOptional.get().setActive(course.isActive());
-            courseInterface.save(courseOptional.get());
+            courseRepository.save(courseOptional.get());
             current = courseOptional.get();
             if (course.isActive()) {
                 message = "Course ID `" + id + "` is now active.";
@@ -102,7 +102,7 @@ public class CourseService {
      * @return      True jika objek berhasil dihapus, dan false jika gagal.
      */
     public boolean delete(Long id) {
-        Optional<Course> courseOptional = courseInterface.findById(id);
+        Optional<Course> courseOptional = courseRepository.findById(id);
         current = null;
 
         if (!courseOptional.isPresent() || !courseOptional.get().isExist()) {
@@ -110,7 +110,7 @@ public class CourseService {
             return false;
         } else {
             courseOptional.get().delete();
-            courseInterface.save(courseOptional.get());
+            courseRepository.save(courseOptional.get());
             message = "Course with ID `" + id + "` deleted successfully.";
             current = courseOptional.get();
             return true;
@@ -123,7 +123,7 @@ public class CourseService {
      * @return      Daftar Jurusan yang masih tersedia.
      */
     public List<Course> courseList() {
-        return courseInterface.findAll().stream()
+        return courseRepository.findAll().stream()
                 .filter(Course::isExist)
                 .collect(Collectors.toList());
     }
@@ -135,7 +135,7 @@ public class CourseService {
      * @return      Mata Kuliah jika tersedia, jika tidak tersedia kembalikan null.
      */
     public Course getCourseById(long id) {
-        Optional<Course> courseOptional = courseInterface.findById(id);
+        Optional<Course> courseOptional = courseRepository.findById(id);
         if (courseOptional.isPresent() && courseOptional.get().isExist()) {
             message = "Course ID Found.";
             return courseOptional.get();

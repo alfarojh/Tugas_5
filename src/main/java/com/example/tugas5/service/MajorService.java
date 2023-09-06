@@ -1,7 +1,7 @@
 package com.example.tugas5.service;
 
 import com.example.tugas5.model.Major;
-import com.example.tugas5.repository.MajorInterface;
+import com.example.tugas5.repository.MajorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class MajorService {
     @Autowired
-    private MajorInterface majorInterface;
+    private MajorRepository majorRepository;
     private Major current;      // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
@@ -32,7 +32,7 @@ public class MajorService {
      */
     public boolean add(Major major) {
         if (major.getName() != null && isNameValid(major.getName())) {
-            majorInterface.save(major);
+            majorRepository.save(major);
             message = "Major added successfully.";
             return true;
         } else {
@@ -49,7 +49,7 @@ public class MajorService {
      * @return      True jika berhasil diperbarui, dan false jika gagal.
      */
     public boolean updateData(Long id, Major major) {
-        Optional<Major> majorOptional = majorInterface.findById(id);
+        Optional<Major> majorOptional = majorRepository.findById(id);
         current = null;
 
         if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
@@ -60,7 +60,7 @@ public class MajorService {
             return false;
         } else {
             majorOptional.get().setName(major.getName());
-            majorInterface.save(majorOptional.get());
+            majorRepository.save(majorOptional.get());
             message = "Major with ID `" + id + "` updated successfully.";
             current = majorOptional.get();
             return true;
@@ -74,7 +74,7 @@ public class MajorService {
      * @return      True jika berhasil dihapus, dan false jika gagal.
      */
     public boolean delete(Long id) {
-        Optional<Major> majorOptional = majorInterface.findById(id);
+        Optional<Major> majorOptional = majorRepository.findById(id);
         current = null;
 
         if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
@@ -82,7 +82,7 @@ public class MajorService {
             return false;
         } else {
             majorOptional.get().delete();
-            majorInterface.save(majorOptional.get());
+            majorRepository.save(majorOptional.get());
             message = "Major with ID `" + id + "` deleted successfully.";
             current = majorOptional.get();
             return true;
@@ -95,7 +95,7 @@ public class MajorService {
      * @return      Daftar Jurusan yang masih tersedia.
      */
     public List<Major> majorList() {
-        return majorInterface.findAll().stream()
+        return majorRepository.findAll().stream()
                 .filter(Major::isExist)
                 .collect(Collectors.toList());
     }
@@ -107,7 +107,7 @@ public class MajorService {
      * @return      Jurusan jika tersedia, jika tidak tersedia kembalikan null.
      */
     public Major getMajorById(long id) {
-        Optional<Major> majorOptional = majorInterface.findById(id);
+        Optional<Major> majorOptional = majorRepository.findById(id);
         if (majorOptional.isPresent() && majorOptional.get().isExist()) {
             message = "Major ID Found.";
             return majorOptional.get();

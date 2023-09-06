@@ -3,9 +3,9 @@ package com.example.tugas5.service;
 import com.example.tugas5.model.Course;
 import com.example.tugas5.model.Student;
 import com.example.tugas5.model.StudentCourse;
-import com.example.tugas5.repository.CourseInterface;
-import com.example.tugas5.repository.StudentCourseInterface;
-import com.example.tugas5.repository.StudentInterface;
+import com.example.tugas5.repository.CourseRepository;
+import com.example.tugas5.repository.StudentCourseRepository;
+import com.example.tugas5.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +15,11 @@ import java.util.Optional;
 @Service
 public class StudentCourseService {
     @Autowired
-    private StudentCourseInterface studentCourseInterface;
+    private StudentCourseRepository studentCourseRepository;
     @Autowired
-    private StudentInterface studentInterface;
+    private StudentRepository studentRepository;
     @Autowired
-    private CourseInterface courseInterface;
+    private CourseRepository courseRepository;
     private StudentCourse current;      // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
@@ -46,8 +46,8 @@ public class StudentCourseService {
             return false;
         }
 
-        Optional<Student> studentOptional = studentInterface.findById(studentCourse.getStudent().getNpm());
-        Optional<Course> courseOptional = courseInterface.findById(studentCourse.getCourse().getId());
+        Optional<Student> studentOptional = studentRepository.findById(studentCourse.getStudent().getNpm());
+        Optional<Course> courseOptional = courseRepository.findById(studentCourse.getCourse().getId());
 
         if (!studentOptional.isPresent()) {
             message = "Student NPM Not Found.";
@@ -56,8 +56,8 @@ public class StudentCourseService {
             message = "Course ID Not Found.";
             return false;
         } else {
-            studentCourse.setCredit(courseInterface.getReferenceById(studentCourse.getCourse().getId()).getCredit());
-            studentCourseInterface.save(studentCourse);
+            studentCourse.setCredit(courseRepository.getReferenceById(studentCourse.getCourse().getId()).getCredit());
+            studentCourseRepository.save(studentCourse);
             studentCourse.setStudent(studentOptional.get());
             studentCourse.setCourse(courseOptional.get());
             message = "StudentCourse added successfully.";
@@ -73,7 +73,7 @@ public class StudentCourseService {
      * @return              True jika berhasil diperbarui, dan false jika gagal.
      */
     public boolean updateData(long id, StudentCourse studentCourse) {
-        Optional<StudentCourse> studentCourseOptional = studentCourseInterface.findById(id);
+        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findById(id);
         current = null;
 
         if (!studentCourseOptional.isPresent()) {
@@ -96,7 +96,7 @@ public class StudentCourseService {
                 studentCourseOptional.get().setExam2(studentCourse.getExam2());
             }
 
-            studentCourseInterface.save(studentCourseOptional.get());
+            studentCourseRepository.save(studentCourseOptional.get());
             message = "StudentCourse with ID `" + id + "` updated successfully.";
             current = studentCourseOptional.get();
             return true;
@@ -111,7 +111,7 @@ public class StudentCourseService {
      * @return              True jika berhasil diperbarui, dan false jika gagal.
      */
     public boolean updateStatus(long id, StudentCourse studentCourse) {
-        Optional<StudentCourse> studentCourseOptional = studentCourseInterface.findById(id);
+        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findById(id);
         current = null;
 
         if (!studentCourseOptional.isPresent()) {
@@ -119,7 +119,7 @@ public class StudentCourseService {
             return false;
         } else {
             studentCourseOptional.get().setActive(studentCourse.isActive());
-            studentCourseInterface.save(studentCourseOptional.get());
+            studentCourseRepository.save(studentCourseOptional.get());
             current = studentCourseOptional.get();
             if (studentCourse.isActive()) {
                 message = "StudentCourse ID `" + id + "` is now active.";
@@ -136,7 +136,7 @@ public class StudentCourseService {
      * @return      Daftar Relasi Mahasiswa dan Mata Kuliah.
      */
     public List<StudentCourse> studentCourseList() {
-        return studentCourseInterface.findAll();
+        return studentCourseRepository.findAll();
     }
 
     /**
@@ -146,7 +146,7 @@ public class StudentCourseService {
      * @return      Relasi Mahasiswa dan Mata Kuliah jika tersedia, jika tidak tersedia kembalikan null.
      */
     public StudentCourse getStudentCourseById(long id) {
-        Optional<StudentCourse> studentCourseOptional = studentCourseInterface.findById(id);
+        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findById(id);
         if (studentCourseOptional.isPresent()) {
             message = "StudentCourse ID Found.";
             return studentCourseOptional.get();

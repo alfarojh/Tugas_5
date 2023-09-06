@@ -1,8 +1,8 @@
 package com.example.tugas5.service;
 
 import com.example.tugas5.model.Student;
-import com.example.tugas5.repository.MajorInterface;
-import com.example.tugas5.repository.StudentInterface;
+import com.example.tugas5.repository.MajorRepository;
+import com.example.tugas5.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
     @Autowired
-    private StudentInterface studentInterface;
+    private StudentRepository studentRepository;
     @Autowired
-    private MajorInterface majorInterface;
+    private MajorRepository majorRepository;
     private Student current;    // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
@@ -36,7 +36,7 @@ public class StudentService {
      * @return          True jika berhasil ditambahkan, dan false jika gagal.
      */
     public boolean add(Student student) {
-        if (student.getMajor() == null || !majorInterface.existsById(student.getMajor().getId())) {
+        if (student.getMajor() == null || !majorRepository.existsById(student.getMajor().getId())) {
             message = "Major ID Not Found.";
             return false;
         } else if (student.getName() == null || isNameNotValid(student.getName())) {
@@ -48,9 +48,9 @@ public class StudentService {
 
             student.setNpm(getNewNPM(year, student.getMajor().getId()));
             student.setYear(year);
-            studentInterface.save(student);
+            studentRepository.save(student);
             message = "Student added successfully.";
-            student.setMajor(majorInterface.getReferenceById(student.getMajor().getId()));
+            student.setMajor(majorRepository.getReferenceById(student.getMajor().getId()));
             return true;
         }
     }
@@ -63,7 +63,7 @@ public class StudentService {
      * @return          True jika berhasil diperbarui, dan false jika gagal.
      */
     public boolean updateData(String npm, Student student) {
-        Optional<Student> studentOptional = studentInterface.findById(npm);
+        Optional<Student> studentOptional = studentRepository.findById(npm);
         current = null;
 
         if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
@@ -75,7 +75,7 @@ public class StudentService {
             return false;
         } else {
             studentOptional.get().setName(student.getName());
-            studentInterface.save(studentOptional.get());
+            studentRepository.save(studentOptional.get());
             message = "Student with NPM `" + npm + "` updated successfully.";
             current = studentOptional.get();
             return true;
@@ -90,7 +90,7 @@ public class StudentService {
      * @return          True jika berhasil diperbarui, dan false jika gagal.
      */
     public boolean updateStatus(String npm, Student student) {
-        Optional<Student> studentOptional = studentInterface.findById(npm);
+        Optional<Student> studentOptional = studentRepository.findById(npm);
         current = null;
 
         if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
@@ -98,7 +98,7 @@ public class StudentService {
             return false;
         } else {
             studentOptional.get().setActive(student.isActive());
-            studentInterface.save(studentOptional.get());
+            studentRepository.save(studentOptional.get());
             current = studentOptional.get();
             if (student.isActive()) {
                 message = "Student NPM `" + npm + "` is now active.";
@@ -116,7 +116,7 @@ public class StudentService {
      * @return      True jika berhasil dihapus, dan false jika gagal.
      */
     public boolean delete(String npm) {
-        Optional<Student> studentOptional = studentInterface.findById(npm);
+        Optional<Student> studentOptional = studentRepository.findById(npm);
         current = null;
 
         if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
@@ -124,7 +124,7 @@ public class StudentService {
             return false;
         } else {
             studentOptional.get().delete();
-            studentInterface.save(studentOptional.get());
+            studentRepository.save(studentOptional.get());
             message = "Student with NPM `" + npm + "` deleted successfully.";
             current = studentOptional.get();
             return true;
@@ -137,7 +137,7 @@ public class StudentService {
      * @return      Daftar Mahasiswa.
      */
     public List<Student> studentList() {
-        return studentInterface.findAll().stream()
+        return studentRepository.findAll().stream()
                 .filter(Student::isExist)
                 .collect(Collectors.toList());
     }
@@ -149,7 +149,7 @@ public class StudentService {
      * @return      Mahasiswa jika tersedia, jika tidak tersedia kembalikan null.
      */
     public Student getStudentByNpm(String npm) {
-        Optional<Student> studentOptional = studentInterface.findById(npm);
+        Optional<Student> studentOptional = studentRepository.findById(npm);
         if (studentOptional.isPresent() && studentOptional.get().isExist()) {
             message = "Student NPM Found.";
             return studentOptional.get();
@@ -166,7 +166,7 @@ public class StudentService {
      */
     private String getNewNPM(int year, long idMajor) {
         long count = 1;
-        for (int index = 0; index < studentInterface.count(); index++) {
+        for (int index = 0; index < studentRepository.count(); index++) {
             if (getStudentByNpm(String.format("%d%02d%04d", year, idMajor, count)) != null) {
                 count++;
             }
