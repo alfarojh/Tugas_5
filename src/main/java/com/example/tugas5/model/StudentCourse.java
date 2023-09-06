@@ -1,5 +1,6 @@
 package com.example.tugas5.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.Column;
@@ -18,17 +19,16 @@ import java.util.List;
 public class StudentCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_student_course")
     private long id;        // ID relasi Mahasiswa dan Mata Kuliah
     @ManyToOne
     @JoinColumn(name = "npm_student", referencedColumnName = "npm")
     private Student student;    // Mahasiswa
     @ManyToOne
-    @JoinColumn(name = "id_course", referencedColumnName = "id_course")
+    @JoinColumn(name = "id_course", referencedColumnName = "id")
     private Course course;      // Jurusan
     private int credit;         // Jumlah SKS
     @OneToMany(mappedBy = "studentCourse")
-    @JsonIgnoreProperties({"id", "studentCourse"})
+    @JsonIgnore
     private List<QuizRecord> quizRecordList;    // Daftar nilau kuis
     private Integer exam1;      // Nilai ujian tengah semester
     private Integer exam2;      // Nilai ujian akhir semester

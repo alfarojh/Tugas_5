@@ -15,10 +15,8 @@ import javax.persistence.Table;
 public class QuizRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_quiz_record")
     private long id;                // ID Kuis
     @ManyToOne
-    @JsonIgnoreProperties({"course", "student", "credit", "quizRecordList", "exam1", "exam2", "active"})
     private StudentCourse studentCourse;    // Relasi untuk nilai kuis Mahasiswa berdasarkan Mata Kuliah
     private Integer score;                  // Nilai Kuis
 

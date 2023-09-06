@@ -17,12 +17,12 @@ import java.util.List;
 public class Major {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_major")
     private long id;                // ID Jurusan
     private String name;            // Nama Jurusan
     @Column(name = "deleted")
     private boolean isDeleted = false;  // Status terhapusnya jurusan
     @OneToMany(mappedBy = "major")
+    @JsonIgnore
     private List<Student> studentList;  // Daftar Mahasiswa tiap Jurusan
 
     public Major() {

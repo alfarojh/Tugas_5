@@ -14,7 +14,6 @@ import javax.persistence.Table;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_course")
     private long id;            // ID Mata Kuliah
     private String name;        // Nama Mata Kuliah
     private int credit;         // Jumlah SKS
