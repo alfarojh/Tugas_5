@@ -25,28 +25,28 @@ public class QuizRecordService {
     /**
      * Menambahkan nilai kuis untuk mahasiswa berdasarkan mata kuliah.
      *
-     * @param quizRecord    Nilai kuis yang akan ditambahkan.
-     * @return              True jika berhasil ditambahkan, dan false jika gagal.
+     * @param quizRecordRequest Nilai kuis yang akan ditambahkan.
+     * @return                  True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public boolean add(QuizRecord quizRecord) {
-        if (quizRecord.getStudentCourse() == null) {
+    public boolean add(QuizRecord quizRecordRequest) {
+        if (quizRecordRequest.getStudentCourse() == null) {
             message = "Input invalid.";
             return false;
         }
 
-        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findById(quizRecord.getStudentCourse().getId());
+        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findById(quizRecordRequest.getStudentCourse().getId());
         if (!studentCourseOptional.isPresent()) {
             message = "StudentCourse ID Not Found.";
             return false;
-        } else if (quizRecord.getScore() == null ||
-                quizRecord.getScore() < 0 ||
-                quizRecord.getScore() > 100) {
+        } else if (quizRecordRequest.getScore() == null ||
+                quizRecordRequest.getScore() < 0 ||
+                quizRecordRequest.getScore() > 100) {
             message = "Input invalid.";
             return false;
         } else {
-            quizRecordRepository.save(quizRecord);
+            quizRecordRepository.save(quizRecordRequest);
             message = "Quiz added successfully.";
-            quizRecord.setStudentCourse(studentCourseOptional.get());
+            quizRecordRequest.setStudentCourse(studentCourseOptional.get());
             return true;
         }
     }

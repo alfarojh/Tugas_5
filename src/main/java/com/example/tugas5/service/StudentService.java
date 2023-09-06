@@ -32,25 +32,25 @@ public class StudentService {
     /**
      * Menambahkan Mahasiswa.
      *
-     * @param student   Mahasiswa yang akan ditambahkan.
-     * @return          True jika berhasil ditambahkan, dan false jika gagal.
+     * @param studentRequest    Mahasiswa yang akan ditambahkan.
+     * @return                  True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public boolean add(Student student) {
-        if (student.getMajor() == null || !majorRepository.existsById(student.getMajor().getId())) {
+    public boolean add(Student studentRequest) {
+        if (studentRequest.getMajor() == null || !majorRepository.existsById(studentRequest.getMajor().getId())) {
             message = "Major ID Not Found.";
             return false;
-        } else if (student.getName() == null || isNameNotValid(student.getName())) {
+        } else if (studentRequest.getName() == null || isNameNotValid(studentRequest.getName())) {
             message = "Input invalid.";
             return false;
         } else {
             SimpleDateFormat format = new SimpleDateFormat("yyyy");
             int year = Integer.parseInt(format.format(new Timestamp(System.currentTimeMillis())));
 
-            student.setNpm(getNewNPM(year, student.getMajor().getId()));
-            student.setYear(year);
-            studentRepository.save(student);
+            studentRequest.setNpm(getNewNPM(year, studentRequest.getMajor().getId()));
+            studentRequest.setYear(year);
+            studentRepository.save(studentRequest);
             message = "Student added successfully.";
-            student.setMajor(majorRepository.getReferenceById(student.getMajor().getId()));
+            studentRequest.setMajor(majorRepository.getReferenceById(studentRequest.getMajor().getId()));
             return true;
         }
     }
@@ -58,23 +58,23 @@ public class StudentService {
     /**
      * Memperbarui informasi Mahasiswa yang ada berdasarkan NPM Mahasiswa.
      *
-     * @param npm       NPM Mahasiswa yang akan diperbarui.
-     * @param student   Informasi Mahasiswa yang ingin diperbarui.
-     * @return          True jika berhasil diperbarui, dan false jika gagal.
+     * @param npm               NPM Mahasiswa yang akan diperbarui.
+     * @param studentRequest    Informasi Mahasiswa yang ingin diperbarui.
+     * @return                  True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateData(String npm, Student student) {
+    public boolean updateData(String npm, Student studentRequest) {
         Optional<Student> studentOptional = studentRepository.findById(npm);
         current = null;
 
         if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
             message = "Student NPM Not Found.";
             return false;
-        } else if (student.getName() == null ||
-                isNameNotValid(student.getName())) {
+        } else if (studentRequest.getName() == null ||
+                isNameNotValid(studentRequest.getName())) {
             message = "Input invalid.";
             return false;
         } else {
-            studentOptional.get().setName(student.getName());
+            studentOptional.get().setName(studentRequest.getName());
             studentRepository.save(studentOptional.get());
             message = "Student with NPM `" + npm + "` updated successfully.";
             current = studentOptional.get();
@@ -85,11 +85,11 @@ public class StudentService {
     /**
      * Memperbarui status Mahasiswa yang ada berdasarkan NPM Mahasiswa.
      *
-     * @param npm       NPM Mahasiswa yang akan diperbarui.
-     * @param student   Status Mahasiswa yang ingin diperbarui.
-     * @return          True jika berhasil diperbarui, dan false jika gagal.
+     * @param npm               NPM Mahasiswa yang akan diperbarui.
+     * @param studentRequest    Status Mahasiswa yang ingin diperbarui.
+     * @return                  True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateStatus(String npm, Student student) {
+    public boolean updateStatus(String npm, Student studentRequest) {
         Optional<Student> studentOptional = studentRepository.findById(npm);
         current = null;
 
@@ -97,10 +97,10 @@ public class StudentService {
             message = "Student NPM Not Found.";
             return false;
         } else {
-            studentOptional.get().setActive(student.isActive());
+            studentOptional.get().setActive(studentRequest.isActive());
             studentRepository.save(studentOptional.get());
             current = studentOptional.get();
-            if (student.isActive()) {
+            if (studentRequest.isActive()) {
                 message = "Student NPM `" + npm + "` is now active.";
             } else {
                 message = "Student NPM `" + npm + "` is now inactive.";

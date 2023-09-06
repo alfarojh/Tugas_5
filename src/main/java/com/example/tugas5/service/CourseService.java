@@ -27,12 +27,12 @@ public class CourseService {
     /**
      * Menambahkan Mata Kuliah baru.
      *
-     * @param course    Mata Kuliah yang akan ditambahkan.
-     * @return          True jika berhasil ditambahkan, dan false jika gagal.
+     * @param courseRequest Mata Kuliah yang akan ditambahkan.
+     * @return              True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public boolean add(Course course) {
-        if (course.getName() != null && isNameValid(course.getName()) && course.getCredit() > 0) {
-            courseRepository.save(course);
+    public boolean add(Course courseRequest) {
+        if (courseRequest.getName() != null && isNameValid(courseRequest.getName()) && courseRequest.getCredit() > 0) {
+            courseRepository.save(courseRequest);
             message = "Course added successfully.";
             return true;
         } else {
@@ -45,22 +45,22 @@ public class CourseService {
      * Memperbarui informasi Mata Kuliah yang ada berdasarkan ID Mata Kuliah.
      *
      * @param id        ID Mata Kuliah yang akan diperbarui.
-     * @param course    Informasi Mata Kuliah yang ingin diperbarui.
-     * @return          True jika berhasil diperbarui, dan false jika gagal.
+     * @param courseRequest Informasi Mata Kuliah yang ingin diperbarui.
+     * @return              True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateData(Long id, Course course) {
+    public boolean updateData(Long id, Course courseRequest) {
         Optional<Course> courseOptional = courseRepository.findById(id);
         current = null;
 
         if (!courseOptional.isPresent() || !courseOptional.get().isExist()) {
             message = "Course ID Not Found.";
             return false;
-        } else if (course.getName() == null || !isNameValid(course.getName()) || course.getCredit() <= 0) {
+        } else if (courseRequest.getName() == null || !isNameValid(courseRequest.getName()) || courseRequest.getCredit() <= 0) {
             message = "Input invalid.";
             return false;
         } else {
-            courseOptional.get().setName(course.getName());
-            courseOptional.get().setCredit(course.getCredit());
+            courseOptional.get().setName(courseRequest.getName());
+            courseOptional.get().setCredit(courseRequest.getCredit());
             courseRepository.save(courseOptional.get());
             message = "Course with ID `" + id + "` updated successfully.";
             current = courseOptional.get();
@@ -72,10 +72,10 @@ public class CourseService {
      * Memperbarui status aktif Mata Kuliah berdasarkan ID Mata Kuliah.
      *
      * @param id        ID Mata Kuliah yang statusnya akan diperbarui.
-     * @param course    Status Mata Kuliah yang ingin diperbarui.
-     * @return          True jika berhasil diperbarui, dan false jika gagal.
+     * @param courseRequest Status Mata Kuliah yang ingin diperbarui.
+     * @return              True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateStatus(long id, Course course) {
+    public boolean updateStatus(long id, Course courseRequest) {
         Optional<Course> courseOptional = courseRepository.findById(id);
         current = null;
 
@@ -83,10 +83,10 @@ public class CourseService {
             message = "Course ID Not Found.";
             return false;
         } else {
-            courseOptional.get().setActive(course.isActive());
+            courseOptional.get().setActive(courseRequest.isActive());
             courseRepository.save(courseOptional.get());
             current = courseOptional.get();
-            if (course.isActive()) {
+            if (courseRequest.isActive()) {
                 message = "Course ID `" + id + "` is now active.";
             } else {
                 message = "Course ID `" + id + "` is now inactive.";

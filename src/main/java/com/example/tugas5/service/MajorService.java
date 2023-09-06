@@ -27,12 +27,12 @@ public class MajorService {
     /**
      * Menambahkan Jurusan baru.
      *
-     * @param major Jurusan yang akan ditambahkan.
-     * @return      True jika berhasil ditambahkan, dan false jika gagal.
+     * @param majorRequest  Jurusan yang akan ditambahkan.
+     * @return              True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public boolean add(Major major) {
-        if (major.getName() != null && isNameValid(major.getName())) {
-            majorRepository.save(major);
+    public boolean add(Major majorRequest) {
+        if (majorRequest.getName() != null && isNameValid(majorRequest.getName())) {
+            majorRepository.save(majorRequest);
             message = "Major added successfully.";
             return true;
         } else {
@@ -44,22 +44,22 @@ public class MajorService {
     /**
      * Memperbarui informasi Jurusan yang ada berdasarkan ID Jurusan.
      *
-     * @param id    ID Jurusan yang akan diperbarui.
-     * @param major Informasi Jurusan yang ingin diperbarui.
-     * @return      True jika berhasil diperbarui, dan false jika gagal.
+     * @param id            ID Jurusan yang akan diperbarui.
+     * @param majorRequest  Informasi Jurusan yang ingin diperbarui.
+     * @return              True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateData(Long id, Major major) {
+    public boolean updateData(Long id, Major majorRequest) {
         Optional<Major> majorOptional = majorRepository.findById(id);
         current = null;
 
         if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
             message = "Major ID Not Found.";
             return false;
-        } else if (major.getName() == null || !isNameValid(major.getName())) {
+        } else if (majorRequest.getName() == null || !isNameValid(majorRequest.getName())) {
             message = "Input invalid.";
             return false;
         } else {
-            majorOptional.get().setName(major.getName());
+            majorOptional.get().setName(majorRequest.getName());
             majorRepository.save(majorOptional.get());
             message = "Major with ID `" + id + "` updated successfully.";
             current = majorOptional.get();

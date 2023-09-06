@@ -47,12 +47,12 @@ public class StudentCourseController {
     }
 
     @PostMapping("")
-    public ResponseEntity addStudentCourse(@RequestBody StudentCourse studentCourse) {
-        if (studentCourseService.add(studentCourse)) {
+    public ResponseEntity addStudentCourse(@RequestBody StudentCourse studentCourseRequest) {
+        if (studentCourseService.add(studentCourseRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
                             studentCourseService.getMessage(),
-                            studentCourse
+                            studentCourseRequest
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -63,8 +63,8 @@ public class StudentCourseController {
     }
 
     @PutMapping("/grade/{id}")
-    public ResponseEntity updateDataStudentCourse(@PathVariable int id, @RequestBody StudentCourse studentCourse) {
-        if (studentCourseService.updateData(id, studentCourse)) {
+    public ResponseEntity updateDataStudentCourse(@PathVariable int id, @RequestBody StudentCourse studentCourseRequest) {
+        if (studentCourseService.updateData(id, studentCourseRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             studentCourseService.getMessage(),
@@ -77,8 +77,8 @@ public class StudentCourseController {
     }
 
     @PatchMapping("/{id}/activated")
-    public ResponseEntity updateActiveStudentCourse(@PathVariable int id, @RequestBody StudentCourse studentCourse) {
-        if (studentCourseService.updateStatus(id, studentCourse)) {
+    public ResponseEntity updateActiveStudentCourse(@PathVariable int id, @RequestBody StudentCourse studentCourseRequest) {
+        if (studentCourseService.updateStatus(id, studentCourseRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             studentCourseService.getMessage(),

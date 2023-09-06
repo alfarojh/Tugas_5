@@ -47,12 +47,12 @@ public class MajorController {
     }
 
     @PostMapping("")
-    public ResponseEntity addMajor(@RequestBody Major major) {
-        if (majorService.add(major)) {
+    public ResponseEntity addMajor(@RequestBody Major majorRequest) {
+        if (majorService.add(majorRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
                             majorService.getMessage(),
-                            major
+                            majorRequest
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -63,8 +63,8 @@ public class MajorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateMajor(@PathVariable long id, @RequestBody Major major) {
-        if (majorService.updateData(id, major)) {
+    public ResponseEntity updateMajor(@PathVariable long id, @RequestBody Major majorRequest) {
+        if (majorService.updateData(id, majorRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             majorService.getMessage(),

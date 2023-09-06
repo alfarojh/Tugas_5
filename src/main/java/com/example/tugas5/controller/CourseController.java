@@ -48,12 +48,12 @@ public class CourseController {
     }
 
     @PostMapping("")
-    public ResponseEntity addCourse(@RequestBody Course course) {
-        if (courseService.add(course)) {
+    public ResponseEntity addCourse(@RequestBody Course courseRequest) {
+        if (courseService.add(courseRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
                             courseService.getMessage(),
-                            course
+                            courseRequest
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -64,8 +64,8 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateCourse(@PathVariable long id, @RequestBody Course course) {
-        if (courseService.updateData(id,course)) {
+    public ResponseEntity updateCourse(@PathVariable long id, @RequestBody Course courseRequest) {
+        if (courseService.updateData(id,courseRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             courseService.getMessage(),
@@ -80,8 +80,8 @@ public class CourseController {
     }
 
     @PatchMapping("/{id}/activated")
-    public ResponseEntity updateActivated(@PathVariable long id, @RequestBody Course course) {
-        if (courseService.updateStatus(id,course)) {
+    public ResponseEntity updateActivated(@PathVariable long id, @RequestBody Course courseRequest) {
+        if (courseService.updateStatus(id,courseRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             courseService.getMessage(),

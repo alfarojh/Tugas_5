@@ -45,12 +45,12 @@ public class QuizRecordController {
     }
 
     @PostMapping("")
-    public ResponseEntity addQuiz(@RequestBody QuizRecord quizRecord) {
-        if (quizRecordService.add(quizRecord)) {
+    public ResponseEntity addQuiz(@RequestBody QuizRecord quizRecordRequest) {
+        if (quizRecordService.add(quizRecordRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
                             quizRecordService.getMessage(),
-                            quizRecord
+                            quizRecordRequest
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

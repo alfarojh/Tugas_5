@@ -48,12 +48,12 @@ public class StudentController {
     }
 
     @PostMapping("")
-    public ResponseEntity addStudent(@RequestBody Student student) {
-        if (studentService.add(student)) {
+    public ResponseEntity addStudent(@RequestBody Student studentRequest) {
+        if (studentService.add(studentRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
                             studentService.getMessage(),
-                            student
+                            studentRequest
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -64,8 +64,8 @@ public class StudentController {
     }
 
     @PutMapping("/{npm}")
-    public ResponseEntity updateStudent(@PathVariable String npm, @RequestBody Student student) {
-        if (studentService.updateData(npm, student)) {
+    public ResponseEntity updateStudent(@PathVariable String npm, @RequestBody Student studentRequest) {
+        if (studentService.updateData(npm, studentRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             studentService.getMessage(),
@@ -80,8 +80,8 @@ public class StudentController {
     }
 
     @PatchMapping("/{npm}/activated")
-    public ResponseEntity updateActivated(@PathVariable String npm, @RequestBody Student student) {
-        if (studentService.updateStatus(npm, student)) {
+    public ResponseEntity updateActivated(@PathVariable String npm, @RequestBody Student studentRequest) {
+        if (studentService.updateStatus(npm, studentRequest)) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
                             studentService.getMessage(),

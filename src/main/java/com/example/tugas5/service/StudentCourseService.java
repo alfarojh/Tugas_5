@@ -34,20 +34,20 @@ public class StudentCourseService {
     /**
      * Menambahkan Relasi Mahasiswa dan Mata Kuliah.
      *
-     * @param studentCourse Relasi Mahasiswa dan Mata Kuliah yang akan ditambahkan.
-     * @return              True jika berhasil ditambahkan, dan false jika gagal.
+     * @param studentCourseRequest  Relasi Mahasiswa dan Mata Kuliah yang akan ditambahkan.
+     * @return                      True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public boolean add(StudentCourse studentCourse) {
-        if (studentCourse.getStudent() == null) {
+    public boolean add(StudentCourse studentCourseRequest) {
+        if (studentCourseRequest.getStudent() == null) {
             message = "Student NPM Not Found.";
             return false;
-        } else if (studentCourse.getCourse() == null) {
+        } else if (studentCourseRequest.getCourse() == null) {
             message = "Course ID Not Found.";
             return false;
         }
 
-        Optional<Student> studentOptional = studentRepository.findById(studentCourse.getStudent().getNpm());
-        Optional<Course> courseOptional = courseRepository.findById(studentCourse.getCourse().getId());
+        Optional<Student> studentOptional = studentRepository.findById(studentCourseRequest.getStudent().getNpm());
+        Optional<Course> courseOptional = courseRepository.findById(studentCourseRequest.getCourse().getId());
 
         if (!studentOptional.isPresent()) {
             message = "Student NPM Not Found.";
@@ -56,10 +56,10 @@ public class StudentCourseService {
             message = "Course ID Not Found.";
             return false;
         } else {
-            studentCourse.setCredit(courseRepository.getReferenceById(studentCourse.getCourse().getId()).getCredit());
-            studentCourseRepository.save(studentCourse);
-            studentCourse.setStudent(studentOptional.get());
-            studentCourse.setCourse(courseOptional.get());
+            studentCourseRequest.setCredit(courseRepository.getReferenceById(studentCourseRequest.getCourse().getId()).getCredit());
+            studentCourseRepository.save(studentCourseRequest);
+            studentCourseRequest.setStudent(studentOptional.get());
+            studentCourseRequest.setCourse(courseOptional.get());
             message = "StudentCourse added successfully.";
             return true;
         }
@@ -68,32 +68,32 @@ public class StudentCourseService {
     /**
      * Memperbarui informasi Relasi Mahasiswa dan Mata Kuliah yang ada berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
      *
-     * @param id            ID Relasi Mahasiswa dan Mata Kuliah yang akan diperbarui.
-     * @param studentCourse Informasi Relasi Mahasiswa dan Mata Kuliah yang ingin diperbarui.
-     * @return              True jika berhasil diperbarui, dan false jika gagal.
+     * @param id                    ID Relasi Mahasiswa dan Mata Kuliah yang akan diperbarui.
+     * @param studentCourseRequest  Informasi Relasi Mahasiswa dan Mata Kuliah yang ingin diperbarui.
+     * @return                      True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateData(long id, StudentCourse studentCourse) {
+    public boolean updateData(long id, StudentCourse studentCourseRequest) {
         Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findById(id);
         current = null;
 
         if (!studentCourseOptional.isPresent()) {
             message = "StudentCourse ID Not Found.";
             return false;
-        } else if (studentCourse.getExam1() != null &&
-                (studentCourse.getExam1() < 0 || studentCourse.getExam1() > 100)) {
+        } else if (studentCourseRequest.getExam1() != null &&
+                (studentCourseRequest.getExam1() < 0 || studentCourseRequest.getExam1() > 100)) {
             message = "Input Invalid.";
             return false;
-        } else if (studentCourse.getExam2() != null &&
-                (studentCourse.getExam2() < 0 || studentCourse.getExam2() > 100)) {
+        } else if (studentCourseRequest.getExam2() != null &&
+                (studentCourseRequest.getExam2() < 0 || studentCourseRequest.getExam2() > 100)) {
             message = "Input Invalid.";
             return false;
         }
         else {
             if (studentCourseOptional.get().getExam1() == null) {
-                studentCourseOptional.get().setExam1(studentCourse.getExam1());
+                studentCourseOptional.get().setExam1(studentCourseRequest.getExam1());
             }
             if (studentCourseOptional.get().getExam2() == null) {
-                studentCourseOptional.get().setExam2(studentCourse.getExam2());
+                studentCourseOptional.get().setExam2(studentCourseRequest.getExam2());
             }
 
             studentCourseRepository.save(studentCourseOptional.get());
@@ -106,11 +106,11 @@ public class StudentCourseService {
     /**
      * Memperbarui status Relasi Mahasiswa dan Mata Kuliah yang ada berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
      *
-     * @param id            ID Relasi Mahasiswa dan Mata Kuliah yang akan diperbarui.
-     * @param studentCourse Status Relasi Mahasiswa dan Mata Kuliah yang ingin diperbarui.
-     * @return              True jika berhasil diperbarui, dan false jika gagal.
+     * @param id                    ID Relasi Mahasiswa dan Mata Kuliah yang akan diperbarui.
+     * @param studentCourseRequest  Status Relasi Mahasiswa dan Mata Kuliah yang ingin diperbarui.
+     * @return                      True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateStatus(long id, StudentCourse studentCourse) {
+    public boolean updateStatus(long id, StudentCourse studentCourseRequest) {
         Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findById(id);
         current = null;
 
@@ -118,10 +118,10 @@ public class StudentCourseService {
             message = "StudentCourse ID Not Found.";
             return false;
         } else {
-            studentCourseOptional.get().setActive(studentCourse.isActive());
+            studentCourseOptional.get().setActive(studentCourseRequest.isActive());
             studentCourseRepository.save(studentCourseOptional.get());
             current = studentCourseOptional.get();
-            if (studentCourse.isActive()) {
+            if (studentCourseRequest.isActive()) {
                 message = "StudentCourse ID `" + id + "` is now active.";
             } else {
                 message = "StudentCourse ID `" + id + "` is now inactive.";
