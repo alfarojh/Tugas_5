@@ -1,47 +1,26 @@
 package com.example.tugas5.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import java.util.List;
+import java.util.Date;
 
 @Entity
-@Table(name = "student_course")
-public class StudentCourse {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;        // ID relasi Mahasiswa dan Mata Kuliah
+public class StudentCourse extends BaseModel{
     @ManyToOne
     @JoinColumn(name = "npm_student", referencedColumnName = "npm")
-    private Student student;    // Mahasiswa
+    private Student student;
     @ManyToOne
     @JoinColumn(name = "id_course", referencedColumnName = "id")
-    private Course course;      // Jurusan
-    private int credit;         // Jumlah SKS
-    @OneToMany(mappedBy = "studentCourse")
-    @JsonIgnore
-    private List<QuizRecord> quizRecordList;    // Daftar nilau kuis
-    private Integer exam1;      // Nilai ujian tengah semester
-    private Integer exam2;      // Nilai ujian akhir semester
-    private boolean isActive;   // Status aktif saat Mahasiswa sedang mengambil Mata Kuliah
+    private Course course;
+    @CreationTimestamp
+    private Date createdAt;
+    private Integer credit;     // Jumlah SKS
 
     public StudentCourse() {
         // Do Nothing
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public List<QuizRecord> getQuizRecordList() {
-        return quizRecordList;
     }
 
     public Student getStudent() {
@@ -60,35 +39,21 @@ public class StudentCourse {
         this.course = course;
     }
 
-    public int getCredit() {
+    @Override
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getCredit() {
         return credit;
     }
 
-    public void setCredit(int credit) {
+    public void setCredit(Integer credit) {
         this.credit = credit;
-    }
-
-    public Integer getExam1() {
-        return exam1;
-    }
-
-    public void setExam1(Integer exam1) {
-        this.exam1 = exam1;
-    }
-
-    public Integer getExam2() {
-        return exam2;
-    }
-
-    public void setExam2(Integer exam2) {
-        this.exam2 = exam2;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 }

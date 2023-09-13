@@ -1,27 +1,20 @@
 package com.example.tugas5.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "student")
-public class Student {
-    @Id
-    @Column(length = 10, name = "npm")
-    private String npm;         // NPM Mahasiswa
-    private String name;        // Nama Mahasiswa
-    private int year;           // Angkatan
+public class Student extends BaseModel{
+    @Column(length = 10, unique = true)
+    private String npm;
+    private String name;
+    private Integer year;
     @ManyToOne
-    private Major major;        // Jurusan
-    @Column(name = "actived")
-    private boolean isActive = true;   // Status aktif Mahasiswa
-    @Column(name = "deleted")
-    private boolean isDeleted = false;  // Status terhapusnya Mahasiswa
+    @JoinColumn(name = "id_major", referencedColumnName = "id")
+    private Major major;
+    private boolean isActive = true;
 
     public Student() {
         // Do Nothing
@@ -66,14 +59,4 @@ public class Student {
     public void setActive(boolean active) {
         isActive = active;
     }
-
-    @JsonIgnore
-    public boolean isExist() {
-        return !isDeleted;
-    }
-
-    public void delete() {
-        isDeleted = true;
-    }
-
 }
