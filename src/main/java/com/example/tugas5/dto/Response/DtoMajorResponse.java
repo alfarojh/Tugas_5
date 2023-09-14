@@ -2,13 +2,10 @@ package com.example.tugas5.dto.Response;
 
 import com.example.tugas5.model.Major;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DtoMajorResponse {
-    @JsonProperty("id_major")
     private String idMajor;
-    @JsonProperty("name")
     private String name;
 
     public DtoMajorResponse(Major major) {
