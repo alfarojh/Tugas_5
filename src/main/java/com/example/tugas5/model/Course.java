@@ -15,6 +15,14 @@ public class Course extends BaseModel{
         // Do Nothing
     }
 
+    public String getIdCourse() {
+        return idCourse;
+    }
+
+    public void setIdCourse(String idCourse) {
+        this.idCourse = idCourse;
+    }
+
     public String getName() {
         return name;
     }
@@ -23,15 +31,15 @@ public class Course extends BaseModel{
         this.name = name;
     }
 
-    public int getCredit() {
+    public Integer getCredit() {
         return credit;
     }
 
-    public void setCredit(int credit) {
+    public void setCredit(Integer credit) {
         this.credit = credit;
     }
 
-    public Boolean isActive() {
+    public Boolean getActive() {
         return isActive;
     }
 

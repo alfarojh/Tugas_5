@@ -16,7 +16,7 @@ public class Validation {
      * @param name      Nama yang akan diperiksa.
      * @return true     Jika nama valid, false jika tidak valid.
      */
-    public static boolean isNameValid(String name) {
-        return (name != null) && name.matches("[a-zA-Z0-9\\s]+");
+    public static boolean isNameNotValid(String name) {
+        return (name == null) || !name.matches("[a-zA-Z0-9\\s]+");
     }
 }

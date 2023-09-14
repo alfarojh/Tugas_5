@@ -1,7 +1,9 @@
 package com.example.tugas5.controller;
 
+import com.example.tugas5.Utility.Validation;
+import com.example.tugas5.dto.Request.DtoCourseRequest;
+import com.example.tugas5.dto.Response.DtoCourseResponse;
 import com.example.tugas5.model.ApiResponse;
-import com.example.tugas5.model.Course;
 import com.example.tugas5.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,86 +29,97 @@ public class CourseController {
     public ResponseEntity getCourses() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(
-                        "All list Course.",
-                        courseService.courseList()
+                        Validation.message("success"),
+                        courseService.courseResponseList()
                 ));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getCourseById(@PathVariable long id) {
-        if (courseService.getCourseById(id) != null) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            courseService.getMessage(),
-                            courseService.getCourseById(id)
-                    ));
-        } else {
+    @GetMapping("/{idCourse}")
+    public ResponseEntity getCourseById(@PathVariable String idCourse) {
+        DtoCourseResponse courseResponse = courseService.getCourseResponseByIdCourse(idCourse);
+
+        if (courseResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             courseService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            courseResponse
                     ));
         }
     }
 
     @PostMapping("")
-    public ResponseEntity addCourse(@RequestBody Course courseRequest) {
-        if (courseService.add(courseRequest)) {
+    public ResponseEntity addCourse(@RequestBody DtoCourseRequest courseRequest) {
+        DtoCourseResponse courseResponse = courseService.add(courseRequest);
+
+        if (courseResponse == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(
+                            courseService.getMessage()
+                    ));
+        } else {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
-                            courseService.getMessage(),
-                            courseRequest
-                    ));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(
-                            courseService.getMessage()
+                            Validation.message("success"),
+                            courseResponse
                     ));
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateCourse(@PathVariable long id, @RequestBody Course courseRequest) {
-        if (courseService.updateData(id,courseRequest)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            courseService.getMessage(),
-                            courseService.getCurrent()
-                    ));
-        } else {
+    @PutMapping("")
+    public ResponseEntity updateCourse(@RequestBody DtoCourseRequest courseRequest) {
+        DtoCourseResponse courseResponse = courseService.updateData(courseRequest);
+
+        if (courseResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             courseService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            courseResponse
                     ));
         }
     }
 
-    @PatchMapping("/{id}/activated")
-    public ResponseEntity updateActivated(@PathVariable long id, @RequestBody Course courseRequest) {
-        if (courseService.updateStatus(id,courseRequest)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            courseService.getMessage(),
-                            courseService.getCurrent()
-                    ));
-        } else {
+    @PatchMapping("")
+    public ResponseEntity updateActivated(@RequestBody DtoCourseRequest courseRequest) {
+        DtoCourseResponse courseResponse = courseService.updateStatus(courseRequest.getIdCourse(), courseRequest.getActive());
+
+        if (courseResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             courseService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            courseResponse
                     ));
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteCourse(@PathVariable long id) {
-        if (courseService.delete(id)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            courseService.getMessage(),
-                            courseService.getCurrent()));
-        } else {
+    @DeleteMapping("")
+    public ResponseEntity deleteCourse(@RequestBody DtoCourseRequest courseRequest) {
+        DtoCourseResponse courseResponse = courseService.delete(courseRequest.getIdCourse());
+
+        if (courseResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             courseService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            courseResponse
                     ));
         }
     }
