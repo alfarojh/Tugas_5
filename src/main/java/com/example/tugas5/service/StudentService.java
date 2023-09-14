@@ -1,13 +1,18 @@
 package com.example.tugas5.service;
 
+import com.example.tugas5.Utility.Validation;
+import com.example.tugas5.dto.Request.DtoStudentRequest;
+import com.example.tugas5.dto.Response.DtoStudentResponse;
+import com.example.tugas5.model.Major;
 import com.example.tugas5.model.Student;
-import com.example.tugas5.repository.MajorRepository;
 import com.example.tugas5.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,16 +21,11 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
-    private MajorRepository majorRepository;
-    private Student current;    // Untuk mengambil data terbaru saat melakukan transaksi.
+    private MajorService majorService;
     private String message;
 
     public String getMessage() {
         return message;
-    }
-
-    public Student getCurrent() {
-        return current;
     }
 
     /**
@@ -34,77 +34,86 @@ public class StudentService {
      * @param studentRequest    Mahasiswa yang akan ditambahkan.
      * @return                  True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public boolean add(Student studentRequest) {
-        if (studentRequest.getMajor() == null || !majorRepository.existsById(studentRequest.getMajor().getId())) {
-            message = "Major ID Not Found.";
-            return false;
-        } else if (studentRequest.getName() == null || isNameNotValid(studentRequest.getName())) {
-            message = "Input invalid.";
-            return false;
+    public DtoStudentResponse add(DtoStudentRequest studentRequest) {
+        if (studentRequest.getNpm() == null) {
+            message = Validation.message("student_not_insert");
+            return null;
+        } else if (studentRequest.getIdMajor() == null) {
+            message = Validation.message("major_not_insert");
+            return null;
+        } else if (Validation.isNameNotValid(studentRequest.getName())) {
+            message = Validation.message("name_invalid");
+            return null;
         } else {
+            Major major = majorService.getMajorById(studentRequest.getIdMajor());
+
+            if (major == null) {
+                message = Validation.message("major_invalid");
+                return null;
+            }
+
             SimpleDateFormat format = new SimpleDateFormat("yyyy");
             int year = Integer.parseInt(format.format(new Timestamp(System.currentTimeMillis())));
+            Student student = new Student();
 
-            studentRequest.setNpm(getNewNPM(year, studentRequest.getMajor().getId()));
-            studentRequest.setYear(year);
-            studentRepository.save(studentRequest);
-            message = "Student added successfully.";
-            studentRequest.setMajor(majorRepository.getReferenceById(studentRequest.getMajor().getId()));
-            return true;
+            student.setNpm(getNewNPM(year, major.getIdMajor()));
+            student.setMajor(major);
+            student.setYear(year);
+            student.setName(studentRequest.getName());
+            studentRepository.save(student);
+            return new DtoStudentResponse(student);
         }
     }
 
     /**
      * Memperbarui informasi Mahasiswa yang ada berdasarkan NPM Mahasiswa.
      *
-     * @param npm               NPM Mahasiswa yang akan diperbarui.
      * @param studentRequest    Informasi Mahasiswa yang ingin diperbarui.
      * @return                  True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateData(String npm, Student studentRequest) {
-        Optional<Student> studentOptional = studentRepository.findById(npm);
-        current = null;
+    public DtoStudentResponse updateData(DtoStudentRequest studentRequest) {
+        if (studentRequest.getNpm() == null) {
+            message = Validation.message("student_not_insert");
+            return null;
+        }
+        Student student = getStudentByNpm(studentRequest.getNpm());
 
-        if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
-            message = "Student NPM Not Found.";
-            return false;
-        } else if (studentRequest.getName() == null ||
-                isNameNotValid(studentRequest.getName())) {
-            message = "Input invalid.";
-            return false;
+        if (student == null) {
+            message = Validation.message("student_invalid");
+            return null;
+        } else if (Validation.isNameNotValid(studentRequest.getName())) {
+            message = Validation.message("name_invalid");
+            return null;
         } else {
-            studentOptional.get().setName(studentRequest.getName());
-            studentRepository.save(studentOptional.get());
-            message = "Student with NPM `" + npm + "` updated successfully.";
-            current = studentOptional.get();
-            return true;
+            student.setName(studentRequest.getName());
+            studentRepository.save(student);
+            return new DtoStudentResponse(student);
         }
     }
 
     /**
      * Memperbarui status Mahasiswa yang ada berdasarkan NPM Mahasiswa.
      *
-     * @param npm               NPM Mahasiswa yang akan diperbarui.
      * @param studentRequest    Status Mahasiswa yang ingin diperbarui.
      * @return                  True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateStatus(String npm, Student studentRequest) {
-        Optional<Student> studentOptional = studentRepository.findById(npm);
-        current = null;
+    public DtoStudentResponse updateStatus(DtoStudentRequest studentRequest) {
+        if (studentRequest.getNpm() == null) {
+            message = Validation.message("student_not_insert");
+            return null;
+        }
+        Student student = getStudentByNpm(studentRequest.getNpm());
 
-        if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
-            message = "Student NPM Not Found.";
-            return false;
+        if (student == null) {
+            message = Validation.message("student_invalid");
+            return null;
+        } else if (studentRequest.getIsActive() == null) {
+            message = Validation.message("active_invalid");
+            return null;
         } else {
-            studentOptional.get().setActive(studentRequest.isActive());
-            studentRepository.save(studentOptional.get());
-            current = studentOptional.get();
-            if (studentRequest.isActive()) {
-                message = "Student NPM `" + npm + "` is now active.";
-            } else {
-                message = "Student NPM `" + npm + "` is now inactive.";
-            }
-            return true;
+            student.setActive(studentRequest.getIsActive());
+            studentRepository.save(student);
+            return new DtoStudentResponse(student);
         }
     }
 
@@ -114,19 +123,21 @@ public class StudentService {
      * @param npm   NPM Mahasiswa yang akan dihapus.
      * @return      True jika berhasil dihapus, dan false jika gagal.
      */
-    public boolean delete(String npm) {
-        Optional<Student> studentOptional = studentRepository.findById(npm);
-        current = null;
+    public DtoStudentResponse delete(String npm) {
+        if (npm == null) {
+            message = Validation.message("student_not_insert");
+            return null;
+        }
+        Student student = getStudentByNpm(npm);
 
-        if (!studentOptional.isPresent() || !studentOptional.get().isExist()) {
-            message = "Student NPM Not Found.";
-            return false;
+        if (student == null) {
+            message = Validation.message("student_invalid");
+            return null;
         } else {
-            studentOptional.get().delete();
-            studentRepository.save(studentOptional.get());
-            message = "Student with NPM `" + npm + "` deleted successfully.";
-            current = studentOptional.get();
-            return true;
+            student.setDeleted(true);
+            student.setDeletedAt(new Date());
+            studentRepository.save(student);
+            return new DtoStudentResponse(student);
         }
     }
 
@@ -136,7 +147,16 @@ public class StudentService {
      * @return      Daftar Mahasiswa.
      */
     public List<Student> studentList() {
-        return studentRepository.findAllNotDeleted();
+        return studentRepository.findAllByIsDeletedIsFalseOrderByNpmAsc();
+    }
+
+    public List<DtoStudentResponse> studentResponseList() {
+        List<DtoStudentResponse> studentResponses = new ArrayList<>();
+
+        for (Student student : studentList()) {
+            studentResponses.add(new DtoStudentResponse(student));
+        }
+        return studentResponses;
     }
 
     /**
@@ -146,14 +166,21 @@ public class StudentService {
      * @return      Mahasiswa jika tersedia, jika tidak tersedia kembalikan null.
      */
     public Student getStudentByNpm(String npm) {
-        Optional<Student> studentOptional = studentRepository.findById(npm);
-        if (studentOptional.isPresent() && studentOptional.get().isExist()) {
-            message = "Student NPM Found.";
+        Optional<Student> studentOptional = studentRepository.findFirstByNpmAndIsDeletedIsFalse(npm);
+
+        if (studentOptional.isPresent()) {
             return studentOptional.get();
         } else {
-            message = "Student NPM Not Found.";
+            message = Validation.message("student_invalid");
             return null;
         }
+    }
+
+    public DtoStudentResponse getStudentResponseByNpm(String npm) {
+        Student student = getStudentByNpm(npm);
+
+        if (student == null) return null;
+        else return new DtoStudentResponse(getStudentByNpm(npm));
     }
 
     /**
@@ -161,24 +188,14 @@ public class StudentService {
      *
      * @return      NPM Mahasiswa baru.
      */
-    private String getNewNPM(int year, long idMajor) {
-        long count = 1;
-        for (int index = 0; index < studentRepository.count(); index++) {
-            if (getStudentByNpm(String.format("%d%02d%04d", year, idMajor, count)) != null) {
-                count++;
-            }
-        }
-        return String.format("%d%02d%04d", year, idMajor, count);
-    }
+    private String getNewNPM(int year, String idMajor) {
+        Optional<Student> studentOptional = studentRepository.findFirstByNpmContainingOrderByNpmDesc(year + idMajor);
 
-    /**
-     * Memeriksa apakah sebuah nama valid.
-     * Nama yang valid hanya mengandung huruf (a-z, A-Z), angka (0-9), dan spasi.
-     *
-     * @param name      Nama yang akan diperiksa.
-     * @return true     Jika nama valid, false jika tidak valid.
-     */
-    private boolean isNameNotValid(String name) {
-        return !name.matches("[a-zA-Z0-9\\s]+");
+        int count = 1;
+        if (studentOptional.isPresent()) {
+            int lengthNpm = studentOptional.get().getNpm().length();
+            count = Integer.parseInt(studentOptional.get().getNpm().substring(lengthNpm - 4, lengthNpm)) + 1;
+        }
+        return String.format("%d%s%04d", year, idMajor, count);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.tugas5.controller;
 
+import com.example.tugas5.Utility.Validation;
+import com.example.tugas5.dto.Request.DtoStudentRequest;
+import com.example.tugas5.dto.Response.DtoStudentResponse;
 import com.example.tugas5.model.ApiResponse;
-import com.example.tugas5.model.Student;
 import com.example.tugas5.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,92 +23,102 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-    
+
     @GetMapping("")
     public ResponseEntity getStudents() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(
-                        "All list Student.",
-                        studentService.studentList()
+                        Validation.message("success"),
+                        studentService.studentResponseList()
                 ));
     }
 
     @GetMapping("/{npm}")
     public ResponseEntity getStudentById(@PathVariable String npm) {
-        if (studentService.getStudentByNpm(npm) != null) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            studentService.getMessage(),
-                            studentService.getStudentByNpm(npm)
-                    ));
-        } else {
+        DtoStudentResponse studentResponse = studentService.getStudentResponseByNpm(npm);
+
+        if (studentResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             studentService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            studentResponse
                     ));
         }
     }
 
     @PostMapping("")
-    public ResponseEntity addStudent(@RequestBody Student studentRequest) {
-        if (studentService.add(studentRequest)) {
+    public ResponseEntity addStudent(@RequestBody DtoStudentRequest studentRequest) {
+        DtoStudentResponse studentResponse = studentService.add(studentRequest);
+
+        if (studentResponse == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(
+                            studentService.getMessage()
+                    ));
+        } else {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
-                            studentService.getMessage(),
-                            studentRequest
-                    ));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(
-                            studentService.getMessage()
+                            Validation.message("success"),
+                            studentResponse
                     ));
         }
     }
 
-    @PutMapping("/{npm}")
-    public ResponseEntity updateStudent(@PathVariable String npm, @RequestBody Student studentRequest) {
-        if (studentService.updateData(npm, studentRequest)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            studentService.getMessage(),
-                            studentService.getCurrent()
-                    ));
-        } else {
+    @PutMapping("")
+    public ResponseEntity updateStudent(@RequestBody DtoStudentRequest studentRequest) {
+        DtoStudentResponse studentResponse = studentService.updateData(studentRequest);
+
+        if (studentResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             studentService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            studentResponse
                     ));
         }
     }
 
-    @PatchMapping("/{npm}/activated")
-    public ResponseEntity updateActivated(@PathVariable String npm, @RequestBody Student studentRequest) {
-        if (studentService.updateStatus(npm, studentRequest)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            studentService.getMessage(),
-                            studentService.getCurrent()
-                    ));
-        } else {
+    @PatchMapping("")
+    public ResponseEntity updateActivated(@RequestBody DtoStudentRequest studentRequest) {
+        DtoStudentResponse studentResponse = studentService.updateStatus(studentRequest);
+
+        if (studentResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             studentService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            studentResponse
                     ));
         }
     }
 
-    @DeleteMapping("/{npm}")
-    public ResponseEntity deleteStudent(@PathVariable String npm) {
-        if (studentService.delete(npm)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            studentService.getMessage(),
-                            studentService.getCurrent()
-                    ));
-        } else {
+    @DeleteMapping("")
+    public ResponseEntity deleteStudent(@RequestBody DtoStudentRequest studentRequest) {
+        DtoStudentResponse studentResponse = studentService.delete(studentRequest.getNpm());
+
+        if (studentResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             studentService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            studentResponse
                     ));
         }
     }
