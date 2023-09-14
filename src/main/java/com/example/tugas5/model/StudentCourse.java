@@ -1,13 +1,10 @@
 package com.example.tugas5.model;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.Date;
 import java.util.List;
 
 @Entity

@@ -1,7 +1,6 @@
 package com.example.tugas5.repository;
 
 import com.example.tugas5.model.Course;
-import com.example.tugas5.model.Major;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

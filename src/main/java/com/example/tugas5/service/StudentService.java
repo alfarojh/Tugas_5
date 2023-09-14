@@ -6,7 +6,6 @@ import com.example.tugas5.dto.Response.DtoStudentResponse;
 import com.example.tugas5.model.Major;
 import com.example.tugas5.model.Student;
 import com.example.tugas5.repository.StudentRepository;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

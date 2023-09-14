@@ -7,13 +7,9 @@ import com.example.tugas5.model.Course;
 import com.example.tugas5.model.QuizRecord;
 import com.example.tugas5.model.Student;
 import com.example.tugas5.model.StudentCourse;
-import com.example.tugas5.repository.CourseRepository;
-import com.example.tugas5.repository.QuizRecordRepository;
 import com.example.tugas5.repository.StudentCourseRepository;
-import com.example.tugas5.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
