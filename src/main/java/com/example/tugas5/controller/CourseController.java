@@ -26,11 +26,11 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping("")
-    public ResponseEntity getCourses() {
+    public ResponseEntity getCourses(@RequestParam int page, @RequestParam int limit) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(
                         Validation.message("success"),
-                        courseService.courseResponseList()
+                        courseService.courseResponseList(page, limit)
                 ));
     }
 

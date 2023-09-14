@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,11 +25,11 @@ public class MajorController {
     private MajorService majorService;
 
     @GetMapping("")
-    public ResponseEntity getMajors() {
+    public ResponseEntity getMajors(@RequestParam int page, @RequestParam int limit) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(
                         Validation.message("success"),
-                        majorService.majorListResponse()
+                        majorService.majorListResponse(page, limit)
                 ));
     }
 

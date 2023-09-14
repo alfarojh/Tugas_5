@@ -8,6 +8,10 @@ import com.example.tugas5.model.Student;
 import com.example.tugas5.repository.StudentRepository;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -36,23 +40,23 @@ public class StudentService {
      * @return                  True jika berhasil ditambahkan, dan false jika gagal.
      */
     public DtoStudentResponse add(DtoStudentRequest studentRequest) {
-        if (studentRequest.getNpm() == null) {
+        if (studentRequest.getIdMajor() == null) {
+            message = Validation.message("major_not_insert");
+            return null;
+        } else if (studentRequest.getNpm() == null) {
             message = Validation.message("student_not_insert");
             return null;
-        } else if (studentRequest.getIdMajor() == null) {
-            message = Validation.message("major_not_insert");
+        }
+
+        Major major = majorService.getMajorById(studentRequest.getIdMajor());
+
+        if (major == null) {
+            message = Validation.message("major_invalid");
             return null;
         } else if (Validation.isNameNotValid(studentRequest.getName())) {
             message = Validation.message("name_invalid");
             return null;
         } else {
-            Major major = majorService.getMajorById(studentRequest.getIdMajor());
-
-            if (major == null) {
-                message = Validation.message("major_invalid");
-                return null;
-            }
-
             SimpleDateFormat format = new SimpleDateFormat("yyyy");
             int year = Integer.parseInt(format.format(new Timestamp(System.currentTimeMillis())));
             Student student = new Student();
@@ -145,13 +149,15 @@ public class StudentService {
         return studentRepository.findAllByIsDeletedIsFalseOrderByNpmAsc();
     }
 
-    public List<DtoStudentResponse> studentResponseList() {
-        List<DtoStudentResponse> studentResponses = new ArrayList<>();
+    public Page<DtoStudentResponse> studentResponseList(int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Student> result = studentRepository.findAllByIsDeletedIsFalseOrderByNpmAsc(pageable);
+        List<DtoStudentResponse> resultDto = new ArrayList<>();
 
-        for (Student student : studentList()) {
-            studentResponses.add(new DtoStudentResponse(student));
+        for (Student student : result.getContent()) {
+            resultDto.add(new DtoStudentResponse(student));
         }
-        return studentResponses;
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
     /**

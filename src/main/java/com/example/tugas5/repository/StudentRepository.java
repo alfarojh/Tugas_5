@@ -1,6 +1,8 @@
 package com.example.tugas5.repository;
 
 import com.example.tugas5.model.Student;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,5 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     List<Student> findAllByIsDeletedIsFalseOrderByNpmAsc();
     Optional<Student> findFirstByNpmAndIsDeletedIsFalse(String npm);
     Optional<Student> findFirstByNpmContainingOrderByNpmDesc(String npm);
+    Page<Student> findAllByIsDeletedIsFalseOrderByNpmAsc(Pageable pageable);
 }

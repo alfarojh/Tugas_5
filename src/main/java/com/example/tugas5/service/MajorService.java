@@ -3,9 +3,15 @@ package com.example.tugas5.service;
 import com.example.tugas5.Utility.Validation;
 import com.example.tugas5.dto.Request.DtoMajorRequest;
 import com.example.tugas5.dto.Response.DtoMajorResponse;
+import com.example.tugas5.dto.Response.DtoStudentResponse;
 import com.example.tugas5.model.Major;
+import com.example.tugas5.model.Student;
 import com.example.tugas5.repository.MajorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -96,23 +102,24 @@ public class MajorService {
         }
     }
 
-
     /**
      * Mengembalikan daftar Jurusan yang masih tersedia.
      *
      * @return Daftar Jurusan yang masih tersedia.
      */
-    public List<DtoMajorResponse> majorListResponse() {
-        List<DtoMajorResponse> dtoMajorResponse = new ArrayList<>();
-
-        for (Major major : majorList()) {
-            dtoMajorResponse.add(new DtoMajorResponse(major));
-        }
-        return dtoMajorResponse;
-    }
-
     public List<Major> majorList() {
         return majorRepository.findAllByIsDeletedIsFalseOrderByIdMajorAsc();
+    }
+
+    public Page<DtoMajorResponse> majorListResponse(int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Major> result = majorRepository.findAllByIsDeletedIsFalseOrderByIdMajorAsc(pageable);
+        List<DtoMajorResponse> resultDto = new ArrayList<>();
+
+        for (Major major : result.getContent()) {
+            resultDto.add(new DtoMajorResponse(major));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
     /**

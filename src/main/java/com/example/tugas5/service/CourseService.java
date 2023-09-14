@@ -3,9 +3,15 @@ package com.example.tugas5.service;
 import com.example.tugas5.Utility.Validation;
 import com.example.tugas5.dto.Request.DtoCourseRequest;
 import com.example.tugas5.dto.Response.DtoCourseResponse;
+import com.example.tugas5.dto.Response.DtoMajorResponse;
 import com.example.tugas5.model.Course;
+import com.example.tugas5.model.Major;
 import com.example.tugas5.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -153,13 +159,15 @@ public class CourseService {
         return courseRepository.findAllByIsDeletedIsFalseOrderByNameAsc();
     }
 
-    public List<DtoCourseResponse> courseResponseList() {
-        List<DtoCourseResponse> courseResponses = new ArrayList<>();
+    public Page<DtoCourseResponse> courseResponseList(int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Course> result = courseRepository.findAllByIsDeletedIsFalseOrderByNameAsc(pageable);
+        List<DtoCourseResponse> resultDto = new ArrayList<>();
 
-        for (Course course : courseList()) {
-            courseResponses.add(new DtoCourseResponse(course));
+        for (Course course : result.getContent()) {
+            resultDto.add(new DtoCourseResponse(course));
         }
-        return courseResponses;
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
     /**
