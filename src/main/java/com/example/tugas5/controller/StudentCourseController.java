@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,11 +24,11 @@ public class StudentCourseController {
     private StudentCourseService studentCourseService;
 
     @GetMapping("")
-    public ResponseEntity getStudentCourses() {
+    public ResponseEntity getStudentCourses(@RequestParam int page, @RequestParam int limit) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(
                         "All list StudentCourse.",
-                        studentCourseService.studentCourseResponseList()
+                        studentCourseService.studentCourseResponseList(page, limit)
                 ));
     }
 

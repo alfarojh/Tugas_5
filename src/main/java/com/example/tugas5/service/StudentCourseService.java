@@ -9,6 +9,10 @@ import com.example.tugas5.model.Student;
 import com.example.tugas5.model.StudentCourse;
 import com.example.tugas5.repository.StudentCourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -101,13 +105,15 @@ public class StudentCourseService {
         return studentCourseRepository.findAllByIsDeletedIsFalseOrderByCreatedAtDesc();
     }
 
-    public List<DtoStudentCourseResponse> studentCourseResponseList() {
-        List<DtoStudentCourseResponse> studentCourseResponses = new ArrayList<>();
+    public Page<DtoStudentCourseResponse> studentCourseResponseList(int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<StudentCourse> result = studentCourseRepository.findAllByIsDeletedIsFalseOrderByCreatedAtDesc(pageable);
+        List<DtoStudentCourseResponse> resultDto = new ArrayList<>();
 
-        for (StudentCourse studentCourse : studentCourseList()) {
-            studentCourseResponses.add(new DtoStudentCourseResponse(studentCourse));
+        for (StudentCourse studentCourse : result.getContent()) {
+            resultDto.add(new DtoStudentCourseResponse(studentCourse));
         }
-        return studentCourseResponses;
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
     /**
