@@ -53,7 +53,12 @@ public class MajorService {
      * @return              True jika berhasil diperbarui, dan false jika gagal.
      */
     public DtoMajorResponse updateData(DtoMajorRequest majorRequest) {
+        if (majorRequest.getIdMajor() == null) {
+            message = Validation.message("major_not_insert");
+            return null;
+        }
         Major major = getMajorById(majorRequest.getIdMajor());
+
         if (major == null) {
             message = Validation.message("major_invalid");
             return null;
@@ -74,6 +79,10 @@ public class MajorService {
      * @return          True jika berhasil dihapus, dan false jika gagal.
      */
     public DtoMajorResponse delete(String idMajor) {
+        if (idMajor == null) {
+            message = Validation.message("major_not_insert");
+            return null;
+        }
         Major major = getMajorById(idMajor);
 
         if (major == null) {

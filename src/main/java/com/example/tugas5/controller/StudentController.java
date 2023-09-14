@@ -89,7 +89,7 @@ public class StudentController {
 
     @PatchMapping("")
     public ResponseEntity updateActivated(@RequestBody DtoStudentRequest studentRequest) {
-        DtoStudentResponse studentResponse = studentService.updateStatus(studentRequest);
+        DtoStudentResponse studentResponse = studentService.updateStatus(studentRequest.getNpm(), studentRequest.getIsActive());
 
         if (studentResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -6,6 +6,7 @@ import com.example.tugas5.dto.Response.DtoStudentResponse;
 import com.example.tugas5.model.Major;
 import com.example.tugas5.model.Student;
 import com.example.tugas5.repository.StudentRepository;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,27 +92,21 @@ public class StudentService {
         }
     }
 
-    /**
-     * Memperbarui status Mahasiswa yang ada berdasarkan NPM Mahasiswa.
-     *
-     * @param studentRequest    Status Mahasiswa yang ingin diperbarui.
-     * @return                  True jika berhasil diperbarui, dan false jika gagal.
-     */
-    public DtoStudentResponse updateStatus(DtoStudentRequest studentRequest) {
-        if (studentRequest.getNpm() == null) {
+    public DtoStudentResponse updateStatus(String npm, Boolean isActive) {
+        if (npm == null) {
             message = Validation.message("student_not_insert");
             return null;
         }
-        Student student = getStudentByNpm(studentRequest.getNpm());
+        Student student = getStudentByNpm(npm);
 
         if (student == null) {
             message = Validation.message("student_invalid");
             return null;
-        } else if (studentRequest.getIsActive() == null) {
+        } else if (isActive == null) {
             message = Validation.message("active_invalid");
             return null;
         } else {
-            student.setActive(studentRequest.getIsActive());
+            student.setActive(isActive);
             studentRepository.save(student);
             return new DtoStudentResponse(student);
         }

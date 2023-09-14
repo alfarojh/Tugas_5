@@ -81,6 +81,10 @@ public class CourseService {
      * @return              True jika berhasil diperbarui, dan false jika gagal.
      */
     public DtoCourseResponse updateData(DtoCourseRequest courseRequest) {
+        if (courseRequest.getIdCourse() == null) {
+            message = Validation.message("course_not_insert");
+            return null;
+        }
         Course course = getCourseByIdCourse(courseRequest.getIdCourse());
 
         if (course == null) {
@@ -96,11 +100,18 @@ public class CourseService {
         }
     }
 
-    public DtoCourseResponse updateStatus(String idCourse, boolean isActive) {
+    public DtoCourseResponse updateStatus(String idCourse, Boolean isActive) {
+        if (idCourse == null) {
+            message = Validation.message("course_not_insert");
+            return null;
+        }
         Course course = getCourseByIdCourse(idCourse);
 
         if (course == null) {
             message = Validation.message("course_invalid");
+            return null;
+        } else if (isActive == null) {
+            message = Validation.message("active_invalid");
             return null;
         } else {
             course.setActive(isActive);
@@ -116,6 +127,10 @@ public class CourseService {
      * @return          True jika objek berhasil dihapus, dan false jika gagal.
      */
     public DtoCourseResponse delete(String idCourse) {
+        if (idCourse == null) {
+            message = Validation.message("course_not_insert");
+            return null;
+        }
         Course course = getCourseByIdCourse(idCourse);
 
         if (course == null) {
