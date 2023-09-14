@@ -1,10 +1,16 @@
 package com.example.tugas5.service;
 
+import com.example.tugas5.Utility.Validation;
+import com.example.tugas5.dto.Request.DtoMajorRequest;
+import com.example.tugas5.dto.Response.DtoMajorResponse;
 import com.example.tugas5.model.Major;
 import com.example.tugas5.repository.MajorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,57 +18,54 @@ import java.util.Optional;
 public class MajorService {
     @Autowired
     private MajorRepository majorRepository;
-    private Major current;      // Untuk mengambil data terbaru saat melakukan transaksi.
     private String message;
 
     public String getMessage() {
         return message;
     }
 
-    public Major getCurrent() {
-        return current;
-    }
-
     /**
      * Menambahkan Jurusan baru.
      *
-     * @param majorRequest  Jurusan yang akan ditambahkan.
-     * @return              True jika berhasil ditambahkan, dan false jika gagal.
+     * @param dtoMajorRequest Jurusan yang akan ditambahkan.
+     * @return True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public boolean add(Major majorRequest) {
-        if (majorRequest.getName() != null && isNameValid(majorRequest.getName())) {
-            majorRepository.save(majorRequest);
-            message = "Major added successfully.";
-            return true;
+    @Transactional
+    public DtoMajorResponse add(DtoMajorRequest dtoMajorRequest) {
+        Major newMajor = new Major();
+
+        if (!Validation.isNameValid(dtoMajorRequest.getName())) {
+            message = Validation.message("name_invalid");
+            return null;
+        } else if (getMajorById(dtoMajorRequest.getIdMajor()) != null) {
+            message = Validation.message("major_invalid");
+            return null;
         } else {
-            message = "Input invalid.";
-            return false;
+            newMajor.setIdMajor(dtoMajorRequest.getIdMajor());
+            newMajor.setName(dtoMajorRequest.getName());
+            majorRepository.save(newMajor);
+            return new DtoMajorResponse(newMajor);
         }
     }
 
     /**
      * Memperbarui informasi Jurusan yang ada berdasarkan ID Jurusan.
      *
-     * @param id            ID Jurusan yang akan diperbarui.
-     * @param majorRequest  Informasi Jurusan yang ingin diperbarui.
-     * @return              True jika berhasil diperbarui, dan false jika gagal.
+     * @param majorRequest Informasi Jurusan yang ingin diperbarui.
+     * @return True jika berhasil diperbarui, dan false jika gagal.
      */
-    public boolean updateData(Long id, Major majorRequest) {
-        Optional<Major> majorOptional = majorRepository.findById(id);
-        current = null;
-
-        if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
-            message = "Major ID Not Found.";
-            return false;
-        } else if (majorRequest.getName() == null || !isNameValid(majorRequest.getName())) {
-            message = "Input invalid.";
-            return false;
+    public DtoMajorResponse updateData(DtoMajorRequest majorRequest) {
+        Major major = getMajorById(majorRequest.getIdMajor());
+        if (major == null){
+            message = Validation.message("major_invalid");
+            return null;
+        } else if (!Validation.isNameValid(majorRequest.getName())) {
+            message = Validation.message("name_invalid");
+            return null;
         } else {
-            majorOptional.get().setName(majorRequest.getName());
-            majorRepository.save(majorOptional.get());
-            message = "Major with ID `" + id + "` updated successfully.";
-            current = majorOptional.get();
-            return true;
+            major.setName(majorRequest.getName());
+            majorRepository.save(major);
+            return new DtoMajorResponse(major);
         }
     }
 
@@ -72,56 +75,64 @@ public class MajorService {
      * @param id    ID Jurusan yang akan dihapus.
      * @return      True jika berhasil dihapus, dan false jika gagal.
      */
-    public boolean delete(Long id) {
-        Optional<Major> majorOptional = majorRepository.findById(id);
-        current = null;
+    public DtoMajorResponse delete(String idMajor) {
+        Major major = getMajorById(idMajor);
 
-        if (!majorOptional.isPresent() || !majorOptional.get().isExist()) {
-            message = "Major ID Not Found.";
-            return false;
+        if (major == null) {
+            message = Validation.message("major_invalid");
+            return null;
         } else {
-            majorOptional.get().delete();
-            majorRepository.save(majorOptional.get());
-            message = "Major with ID `" + id + "` deleted successfully.";
-            current = majorOptional.get();
-            return true;
+            major.setDeleted(true);
+            major.setDeletedAt(new Date());
+            majorRepository.save(major);
+            return new DtoMajorResponse(major);
         }
     }
+
 
     /**
      * Mengembalikan daftar Jurusan yang masih tersedia.
      *
-     * @return      Daftar Jurusan yang masih tersedia.
+     * @return Daftar Jurusan yang masih tersedia.
      */
+    public List<DtoMajorResponse> majorListResponse() {
+        List<DtoMajorResponse> dtoMajorRespons = new ArrayList<>();
+        for (Major major : majorList()) {
+            dtoMajorRespons.add(new DtoMajorResponse(major));
+        }
+        message = Validation.message("success");
+        return dtoMajorRespons;
+    }
+
     public List<Major> majorList() {
-        return majorRepository.findAllNotDeleted();
+        return majorRepository.findAllByIsDeletedIsFalseOrderByIdMajorAsc();
     }
 
     /**
      * Mengembalikan informasi Jurusan berdasarkan ID Jurusan.
      *
-     * @param id    ID Jurusan.
-     * @return      Jurusan jika tersedia, jika tidak tersedia kembalikan null.
+     * @param idMajor ID Jurusan.
+     * @return Jurusan jika tersedia, jika tidak tersedia kembalikan null.
      */
-    public Major getMajorById(long id) {
-        Optional<Major> majorOptional = majorRepository.findById(id);
-        if (majorOptional.isPresent() && majorOptional.get().isExist()) {
-            message = "Major ID Found.";
-            return majorOptional.get();
+    public Major getMajorById(String idMajor) {
+        Optional<Major> majorExist = majorRepository.findFirstByIdMajorAndIsDeletedIsFalse(idMajor);
+        if (majorExist.isPresent()) {
+            return majorExist.get();
         } else {
-            message = "Major ID Not Found.";
+            message = Validation.message("major_invalid");
             return null;
         }
     }
 
-    /**
-     * Memeriksa apakah sebuah nama valid.
-     * Nama yang valid hanya mengandung huruf (a-z, A-Z), angka (0-9), dan spasi.
-     *
-     * @param name      Nama yang akan diperiksa.
-     * @return true     Jika nama valid, false jika tidak valid.
-     */
-    private boolean isNameValid(String name) {
-        return name.matches("[a-zA-Z0-9\\s]+");
+    public DtoMajorResponse getMajorResponseByIdMajor(String idMajor) {
+        Major major = getMajorById(idMajor);
+
+        if (major != null) return new DtoMajorResponse(major);
+        else return null;
+    }
+
+
+    private boolean isIdMajorValid(String idMajor) {
+        return idMajor != null && idMajor.matches("[0-9]+");
     }
 }

@@ -1,7 +1,9 @@
 package com.example.tugas5.controller;
 
+import com.example.tugas5.Utility.Validation;
+import com.example.tugas5.dto.Request.DtoMajorRequest;
+import com.example.tugas5.dto.Response.DtoMajorResponse;
 import com.example.tugas5.model.ApiResponse;
-import com.example.tugas5.model.Major;
 import com.example.tugas5.service.MajorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,71 +27,79 @@ public class MajorController {
     public ResponseEntity getMajors() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(
-                        "All list Major.",
-                        majorService.majorList()
+                        Validation.message("success"),
+                        majorService.majorListResponse()
                 ));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getMajorById(@PathVariable long id) {
-        if (majorService.getMajorById(id) != null) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            majorService.getMessage(),
-                            majorService.getMajorById(id)
-                    ));
-        } else {
+    @GetMapping("/{idMajor}")
+    public ResponseEntity getMajorById(@PathVariable String idMajor) {
+        DtoMajorResponse majorResponse = majorService.getMajorResponseByIdMajor(idMajor);
+
+        if (majorResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             majorService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            majorResponse
                     ));
         }
     }
 
     @PostMapping("")
-    public ResponseEntity addMajor(@RequestBody Major majorRequest) {
-        if (majorService.add(majorRequest)) {
+    public ResponseEntity addMajor(@RequestBody DtoMajorRequest dtoMajorRequest) {
+        DtoMajorResponse majorResponse = majorService.add(dtoMajorRequest);
+
+        if (majorResponse == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(
+                            majorService.getMessage()
+                    ));
+        } else {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
-                            majorService.getMessage(),
-                            majorRequest
-                    ));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(
-                            majorService.getMessage()
+                            Validation.message("success"),
+                            majorResponse
                     ));
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateMajor(@PathVariable long id, @RequestBody Major majorRequest) {
-        if (majorService.updateData(id, majorRequest)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            majorService.getMessage(),
-                            majorService.getCurrent()
-                    ));
-        } else {
+    @PutMapping("")
+    public ResponseEntity updateMajor(@RequestBody DtoMajorRequest majorRequest) {
+        DtoMajorResponse majorResponse = majorService.updateData(majorRequest);
+
+        if (majorResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             majorService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            majorResponse
                     ));
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteMajor(@PathVariable long id) {
-        if (majorService.delete(id)) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(
-                            majorService.getMessage(),
-                            majorService.getCurrent()
-                    ));
-        } else {
+    @DeleteMapping("")
+    public ResponseEntity deleteMajor(@RequestBody DtoMajorRequest majorRequest) {
+        DtoMajorResponse majorResponse = majorService.delete(majorRequest.getIdMajor());
+
+        if (majorResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(
                             majorService.getMessage()
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse(
+                            Validation.message("success"),
+                            majorResponse
                     ));
         }
     }
