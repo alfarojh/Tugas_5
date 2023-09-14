@@ -26,21 +26,21 @@ public class MajorService {
     /**
      * Menambahkan Jurusan baru.
      *
-     * @param dtoMajorRequest   Jurusan yang akan ditambahkan.
-     * @return                  True jika berhasil ditambahkan, dan false jika gagal.
+     * @param majorRequest  Jurusan yang akan ditambahkan.
+     * @return              True jika berhasil ditambahkan, dan false jika gagal.
      */
-    public DtoMajorResponse add(DtoMajorRequest dtoMajorRequest) {
+    public DtoMajorResponse add(DtoMajorRequest majorRequest) {
         Major major = new Major();
 
-        if (getMajorById(dtoMajorRequest.getIdMajor()) != null) {
+        if (majorRequest.getIdMajor() == null || getMajorById(majorRequest.getIdMajor()) != null) {
             message = Validation.message("major_invalid");
             return null;
-        } else if (Validation.isNameNotValid(dtoMajorRequest.getName())) {
+        } else if (Validation.isNameNotValid(majorRequest.getName())) {
             message = Validation.message("name_invalid");
             return null;
         } else {
-            major.setIdMajor(dtoMajorRequest.getIdMajor());
-            major.setName(dtoMajorRequest.getName());
+            major.setIdMajor(majorRequest.getIdMajor());
+            major.setName(majorRequest.getName());
             majorRepository.save(major);
             return new DtoMajorResponse(major);
         }
