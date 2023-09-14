@@ -2,22 +2,25 @@ package com.example.tugas5.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class StudentCourse extends BaseModel{
     @ManyToOne
-    @JoinColumn(name = "npm_student", referencedColumnName = "npm")
+    @JoinColumn(name = "id_student", referencedColumnName = "id")
     private Student student;
     @ManyToOne
     @JoinColumn(name = "id_course", referencedColumnName = "id")
     private Course course;
-    @CreationTimestamp
-    private Date createdAt;
     private Integer credit;     // Jumlah SKS
+    @OneToMany (mappedBy = "studentCourse", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuizRecord> quizRecordList;
 
     public StudentCourse() {
         // Do Nothing
@@ -39,21 +42,19 @@ public class StudentCourse extends BaseModel{
         this.course = course;
     }
 
-    @Override
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    @Override
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Integer getCredit() {
         return credit;
     }
 
     public void setCredit(Integer credit) {
         this.credit = credit;
+    }
+
+    public List<QuizRecord> getQuizRecordList() {
+        return quizRecordList;
+    }
+
+    public void setQuizRecordList(List<QuizRecord> quizRecordList) {
+        this.quizRecordList = quizRecordList;
     }
 }

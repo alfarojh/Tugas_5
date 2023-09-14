@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface QuizRecordRepository extends JpaRepository<QuizRecord, Long> {
-    @Query("SELECT qr FROM QuizRecord qr ORDER BY qr.id")
-    List<QuizRecord> findAllSorted();
+
 }
