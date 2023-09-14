@@ -4,7 +4,6 @@ import com.example.tugas5.Utility.Validation;
 import com.example.tugas5.dto.Request.DtoCourseRequest;
 import com.example.tugas5.dto.Response.DtoCourseResponse;
 import com.example.tugas5.model.Course;
-import com.example.tugas5.model.Major;
 import com.example.tugas5.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,8 +112,8 @@ public class CourseService {
     /**
      * Menghapus Mata Kuliah.
      *
-     * @param id    ID Mata Kuliah yang akan dihapus.
-     * @return      True jika objek berhasil dihapus, dan false jika gagal.
+     * @param idCourse  ID Mata Kuliah yang akan dihapus.
+     * @return          True jika objek berhasil dihapus, dan false jika gagal.
      */
     public DtoCourseResponse delete(String idCourse) {
         Course course = getCourseByIdCourse(idCourse);
@@ -166,7 +165,10 @@ public class CourseService {
     }
 
     public DtoCourseResponse getCourseResponseByIdCourse(String idCourse) {
-        return new DtoCourseResponse(getCourseByIdCourse(idCourse));
+        Course course = getCourseByIdCourse(idCourse);
+
+        if (course == null) return null;
+        else return new DtoCourseResponse(getCourseByIdCourse(idCourse));
     }
 
     private boolean isCourseIdValid(String idCourse) {

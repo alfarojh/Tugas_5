@@ -123,6 +123,9 @@ public class MajorService {
     }
 
     public DtoMajorResponse getMajorResponseByIdMajor(String idMajor) {
-        return new DtoMajorResponse(getMajorById(idMajor));
+        Major major = getMajorById(idMajor);
+
+        if (major == null) return null;
+        else return new DtoMajorResponse(getMajorById(idMajor));
     }
 }
