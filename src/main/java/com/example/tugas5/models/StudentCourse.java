@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class StudentCourse extends BaseModel{
     @Column(unique = true)
-    private String idStudentCourse;
+    private String code;
     @ManyToOne
     @JoinColumn(name = "id_student", referencedColumnName = "id")
     private Student student;
@@ -27,19 +27,19 @@ public class StudentCourse extends BaseModel{
         // Do Nothing
     }
 
-    public StudentCourse(String idStudentCourse, Student student, Course course, Integer credit) {
-        this.idStudentCourse = idStudentCourse;
+    public StudentCourse(String code, Student student, Course course, Integer credit) {
+        this.code = code;
         this.student = student;
         this.course = course;
         this.credit = credit;
     }
 
-    public String getIdStudentCourse() {
-        return idStudentCourse;
+    public String getCode() {
+        return code;
     }
 
-    public void setIdStudentCourse(String idStudentCourse) {
-        this.idStudentCourse = idStudentCourse;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Student getStudent() {

@@ -29,7 +29,7 @@ public class DtoStudentCourseResponse {
     private Date createdAt;
 
     public DtoStudentCourseResponse(StudentCourse studentCourse) {
-        this.code = studentCourse.getIdStudentCourse();
+        this.code = studentCourse.getCode();
         this.nameStudent = studentCourse.getStudent().getName();
         this.nameMajor = studentCourse.getStudent().getMajor().getName();
         this.nameCourse = studentCourse.getCourse().getName();

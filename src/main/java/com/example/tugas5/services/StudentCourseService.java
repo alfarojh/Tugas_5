@@ -82,7 +82,7 @@ public class StudentCourseService {
             if (countScore == 0) studentCourse.setGrade(Grade.getGradeForScore(null).name());
             else studentCourse.setGrade(Grade.getGradeForScore(totalScore/countScore).name());
 
-            studentCourse.setIdStudentCourse(getNewId());
+            studentCourse.setCode(getNewId());
             studentCourse.setStudent(student);
             studentCourse.setCourse(course);
             studentCourse.setCredit(course.getCredit());
@@ -98,7 +98,7 @@ public class StudentCourseService {
             message = Validation.message("student_course_not_insert");
             return null;
         }
-        StudentCourse studentCourse = getStudentCourseByIdStudentCourse(idStudentCourse);
+        StudentCourse studentCourse = getStudentCourseByCode(idStudentCourse);
 
         if (studentCourse == null) {
             message = Validation.message("student_course_invalid");
@@ -155,15 +155,15 @@ public class StudentCourseService {
     /**
      * Mengembalikan informasi Relasi Mahasiswa dan Mata Kuliah berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
      *
-     * @param idStudentCourse   ID Relasi Mahasiswa dan Mata Kuliah.
-     * @return                  Relasi Mahasiswa dan Mata Kuliah jika tersedia, jika tidak tersedia kembalikan null.
+     * @param code  ID Relasi Mahasiswa dan Mata Kuliah.
+     * @return      Relasi Mahasiswa dan Mata Kuliah jika tersedia, jika tidak tersedia kembalikan null.
      */
-    public StudentCourse getStudentCourseByIdStudentCourse(String idStudentCourse) {
-        if (idStudentCourse == null) {
+    public StudentCourse getStudentCourseByCode(String code) {
+        if (code == null) {
             message = Validation.message("student_course_not_insert");
             return null;
         }
-        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByIdStudentCourseAndIsDeletedIsFalse(idStudentCourse);
+        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByCodeAndIsDeletedIsFalse(code);
 
         if (studentCourseOptional.isPresent()) {
             return studentCourseOptional.get();
@@ -173,8 +173,8 @@ public class StudentCourseService {
         }
     }
 
-    public DtoStudentCourseResponse getStudentCourseResponseByIdStudentCourse(String idStudentCourse) {
-        StudentCourse studentCourse = getStudentCourseByIdStudentCourse(idStudentCourse);
+    public DtoStudentCourseResponse getStudentCourseResponseByCode(String code) {
+        StudentCourse studentCourse = getStudentCourseByCode(code);
 
         if (studentCourse == null) return null;
         else return new DtoStudentCourseResponse(studentCourse);
@@ -184,10 +184,10 @@ public class StudentCourseService {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String date = format.format(new Timestamp(System.currentTimeMillis()));
 
-        Optional <StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByIdStudentCourseContainingOrderByIdStudentCourseDesc(date);
+        Optional <StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByCodeContainingOrderByCodeDesc(date);
         int count = 1;
         if (studentCourseOptional.isPresent()) {
-            count = Integer.parseInt(studentCourseOptional.get().getIdStudentCourse().substring(8, 12)) + 1;
+            count = Integer.parseInt(studentCourseOptional.get().getCode().substring(8, 12)) + 1;
         }
         return String.format("%s%04d", date, count);
     }

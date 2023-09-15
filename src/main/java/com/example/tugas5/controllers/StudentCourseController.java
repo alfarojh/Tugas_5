@@ -51,9 +51,9 @@ public class StudentCourseController {
     }
 
     // API untuk menampilkan informasi relasi Mahasiswa dan Mata Kuliah berdasarakan ID.
-    @GetMapping("/{idStudentCourse}")
-    public ResponseEntity getStudentCourseByIdStudentCourse(@PathVariable String idStudentCourse) {
-        DtoStudentCourseResponse studentCourseResponse = studentCourseService.getStudentCourseResponseByIdStudentCourse(idStudentCourse);
+    @GetMapping("/{code}")
+    public ResponseEntity getStudentCourseByIdStudentCourse(@PathVariable String code) {
+        DtoStudentCourseResponse studentCourseResponse = studentCourseService.getStudentCourseResponseByCode(code);
 
         if (studentCourseResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
