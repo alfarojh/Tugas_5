@@ -1,4 +1,4 @@
-package com.example.tugas5.Utilities;
+package com.example.tugas5.utilities;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

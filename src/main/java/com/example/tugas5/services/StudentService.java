@@ -1,6 +1,6 @@
 package com.example.tugas5.services;
 
-import com.example.tugas5.Utilities.Validation;
+import com.example.tugas5.utilities.Validation;
 import com.example.tugas5.dto.Requests.DtoStudentRequest;
 import com.example.tugas5.dto.Responses.DtoStudentResponse;
 import com.example.tugas5.models.Major;

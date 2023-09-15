@@ -1,6 +1,6 @@
 package com.example.tugas5.controllers;
 
-import com.example.tugas5.Utilities.Validation;
+import com.example.tugas5.utilities.Validation;
 import com.example.tugas5.dto.Requests.DtoCourseRequest;
 import com.example.tugas5.dto.Responses.DtoCourseResponse;
 import com.example.tugas5.models.ApiResponse;
