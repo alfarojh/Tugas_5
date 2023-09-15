@@ -18,4 +18,5 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     Page<Student> findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNpmAsc(String name, Pageable pageable);
     Page<Student> findAllByYearBetweenAndIsDeletedIsFalseOrderByNpmAsc(Integer startYear, Integer endYear, Pageable pageable);
     Page<Student> findAllByIsActiveAndIsDeletedIsFalseOrderByNpmAsc(Boolean isActive, Pageable pageable);
+    Page<Student> findAllByMajor_IdMajorAndIsDeletedIsFalseOrderByNpmAsc(String idMajor, Pageable pageable);
 }

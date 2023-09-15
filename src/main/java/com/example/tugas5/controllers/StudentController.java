@@ -29,6 +29,7 @@ public class StudentController {
     public ResponseEntity getStudents(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer[] year,
+            @RequestParam(required = false, name = "id_major") String idMajor,
             @RequestParam(required = false, name = "is_active") Boolean isActive,
             @RequestParam int page, int limit) {
         if (name != null) {
@@ -57,6 +58,12 @@ public class StudentController {
                                 studentService.studentResponseList(page, limit)
                         ));
             }
+        } else if (idMajor != null && !idMajor.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            studentService.studentResponseListByIdMajor(idMajor, page, limit)
+                    ));
         } else if (isActive != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(

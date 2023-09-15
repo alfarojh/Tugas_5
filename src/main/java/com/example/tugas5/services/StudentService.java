@@ -192,6 +192,18 @@ public class StudentService {
         return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
+    public Page<DtoStudentResponse> studentResponseListByIdMajor(String idMajor, int page, int limit) {
+        if (idMajor.length() == 1) idMajor = "0" + idMajor;
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Student> result = studentRepository.findAllByMajor_IdMajorAndIsDeletedIsFalseOrderByNpmAsc(idMajor, pageable);
+        List<DtoStudentResponse> resultDto = new ArrayList<>();
+
+        for (Student student : result.getContent()) {
+            resultDto.add(new DtoStudentResponse(student));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
     /**
      * Mengembalikan informasi Mahasiswa berdasarkan NPM.
      *
