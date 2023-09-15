@@ -20,6 +20,13 @@ public class Student extends BaseModel{
         // Do Nothing
     }
 
+    public Student(String npm, String name, Integer year, Major major) {
+        this.npm = npm;
+        this.name = name;
+        this.year = year;
+        this.major = major;
+    }
+
     public String getNpm() {
         return npm;
     }

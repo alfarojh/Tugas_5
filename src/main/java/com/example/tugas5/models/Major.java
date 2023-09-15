@@ -14,7 +14,6 @@ public class Major extends BaseModel{
     }
 
     public Major(String idMajor, String name) {
-        super();
         this.idMajor = idMajor;
         this.name = name;
     }

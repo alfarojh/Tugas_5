@@ -36,7 +36,7 @@ public class MajorService {
     public DtoMajorResponse add(DtoMajorRequest majorRequest) {
         Major major = new Major();
 
-        if (majorRequest.getIdMajor() == null || getMajorById(majorRequest.getIdMajor()) != null) {
+        if (majorRequest.getIdMajor() == null || !majorRequest.getIdMajor().matches("\\d+") || getMajorById(majorRequest.getIdMajor()) != null) {
             message = Validation.message("major_invalid");
             return null;
         } else if (Validation.isNameNotValid(majorRequest.getName())) {

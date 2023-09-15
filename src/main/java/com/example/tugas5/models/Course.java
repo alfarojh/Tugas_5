@@ -15,6 +15,12 @@ public class Course extends BaseModel{
         // Do Nothing
     }
 
+    public Course(String idCourse, String name, Integer credit) {
+        this.idCourse = idCourse;
+        this.name = name;
+        this.credit = credit;
+    }
+
     public String getIdCourse() {
         return idCourse;
     }
