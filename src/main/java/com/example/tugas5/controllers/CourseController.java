@@ -26,12 +26,30 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping("")
-    public ResponseEntity getCourses(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(
-                        Validation.message("success"),
-                        courseService.courseResponseList(page, limit)
-                ));
+    public ResponseEntity getCourses(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false, name = "is_active") Boolean isActive,
+            @RequestParam int page, @RequestParam int limit) {
+        if (name != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            courseService.courseResponseListByName(name, page, limit)
+                    ));
+
+        } else if (isActive != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            courseService.courseResponseListByActive(isActive, page, limit)
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            courseService.courseResponseList(page, limit)
+                    ));
+        }
     }
 
     @GetMapping("/{idCourse}")

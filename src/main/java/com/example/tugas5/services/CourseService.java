@@ -168,6 +168,28 @@ public class CourseService {
         return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
+    public Page<DtoCourseResponse> courseResponseListByName(String name, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Course> result = courseRepository.findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNameAsc(name, pageable);
+        List<DtoCourseResponse> resultDto = new ArrayList<>();
+
+        for (Course course : result.getContent()) {
+            resultDto.add(new DtoCourseResponse(course));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
+    public Page<DtoCourseResponse> courseResponseListByActive(Boolean isActive, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Course> result = courseRepository.findAllByIsActiveAndIsDeletedIsFalseOrderByNameAsc(isActive, pageable);
+        List<DtoCourseResponse> resultDto = new ArrayList<>();
+
+        for (Course course : result.getContent()) {
+            resultDto.add(new DtoCourseResponse(course));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
     /**
      * Mengembalikan informasi Mata Kuliah berdasarkan ID Mata Kuliah.
      *

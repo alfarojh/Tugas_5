@@ -15,4 +15,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findFirstByIdCourseAndIsDeletedIsFalse(String idCourse);
     Optional<Course> findFirstByIdCourseContainingIgnoreCaseOrderByIdCourseDesc(String idCourse);
     Page<Course> findAllByIsDeletedIsFalseOrderByNameAsc(Pageable pageable);
+    Page<Course> findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNameAsc(String name, Pageable pageable);
+    Page<Course> findAllByIsActiveAndIsDeletedIsFalseOrderByNameAsc(Boolean isActive, Pageable pageable);
 }
