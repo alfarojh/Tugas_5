@@ -14,4 +14,5 @@ public interface MajorRepository extends JpaRepository<Major, Long> {
     List<Major> findAllByIsDeletedIsFalseOrderByIdMajorAsc();
     Optional<Major> findFirstByIdMajorAndIsDeletedIsFalse(String idMajor);
     Page<Major> findAllByIsDeletedIsFalseOrderByIdMajorAsc(Pageable pageable);
+    Page<Major> findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNameAsc(String name, Pageable pageable);
 }

@@ -120,6 +120,16 @@ public class MajorService {
         return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
+    public Page<DtoMajorResponse> majorListResponseByName(String name, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Major> result = majorRepository.findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNameAsc(name, pageable);
+        List<DtoMajorResponse> resultDto = new ArrayList<>();
+
+        for (Major major : result.getContent()) {
+            resultDto.add(new DtoMajorResponse(major));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
     /**
      * Mengembalikan informasi Jurusan berdasarkan ID Jurusan.
      *

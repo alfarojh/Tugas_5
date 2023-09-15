@@ -25,12 +25,22 @@ public class MajorController {
     private MajorService majorService;
 
     @GetMapping("")
-    public ResponseEntity getMajors(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(
-                        Validation.message("success"),
-                        majorService.majorListResponse(page, limit)
-                ));
+    public ResponseEntity getMajors(
+            @RequestParam(required = false) String name,
+            @RequestParam int page, @RequestParam int limit) {
+        if (name != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            majorService.majorListResponseByName(name, page, limit)
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            majorService.majorListResponse(page, limit)
+                    ));
+        }
     }
 
     @GetMapping("/{idMajor}")
