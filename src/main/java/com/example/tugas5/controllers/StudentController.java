@@ -25,6 +25,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    // API untuk menampilkan daftar Mahasiswa berdasarkan request.
     @GetMapping("")
     public ResponseEntity getStudents(
             @RequestParam(required = false) String name,
@@ -79,6 +80,7 @@ public class StudentController {
         }
     }
 
+    // API untuk menampilkan informasi Mahasiswa berdasarkan NPM Mahasiswa.
     @GetMapping("/{npm}")
     public ResponseEntity getStudentById(@PathVariable String npm) {
         DtoStudentResponse studentResponse = studentService.getStudentResponseByNpm(npm);
@@ -97,6 +99,7 @@ public class StudentController {
         }
     }
 
+    // API untuk menambahkan Mahasiswa baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addStudent(@RequestBody DtoStudentRequest studentRequest) {
         DtoStudentResponse studentResponse = studentService.add(studentRequest);
@@ -115,6 +118,7 @@ public class StudentController {
         }
     }
 
+    // API untuk memperbarui informasi Mahasiswa berdasarkan request.
     @PutMapping("")
     public ResponseEntity updateStudent(@RequestBody DtoStudentRequest studentRequest) {
         DtoStudentResponse studentResponse = studentService.updateData(studentRequest);
@@ -133,6 +137,7 @@ public class StudentController {
         }
     }
 
+    // API untuk memperbarui status aktif Mahasiswa berdasarkan request.
     @PatchMapping("")
     public ResponseEntity updateActivated(@RequestBody DtoStudentRequest studentRequest) {
         DtoStudentResponse studentResponse = studentService.updateStatus(studentRequest.getNpm(), studentRequest.getIsActive());
@@ -151,6 +156,7 @@ public class StudentController {
         }
     }
 
+    // API untuk menghapus Mahasiswa berdasarkan NPM Mahasiswa.
     @DeleteMapping("")
     public ResponseEntity deleteStudent(@RequestBody DtoStudentRequest studentRequest) {
         DtoStudentResponse studentResponse = studentService.delete(studentRequest.getNpm());

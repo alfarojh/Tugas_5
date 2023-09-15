@@ -16,6 +16,7 @@ public class SeedController {
     @Autowired
     private SeedData seedData;
 
+    // API untuk membuat seed baru.
     @PostMapping("")
     public ResponseEntity createSeed() {
         seedData.seed();

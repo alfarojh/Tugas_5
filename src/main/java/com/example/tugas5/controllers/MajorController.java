@@ -24,6 +24,7 @@ public class MajorController {
     @Autowired
     private MajorService majorService;
 
+    // API untuk menampilkan daftar Jurusan berdasarkan request.
     @GetMapping("")
     public ResponseEntity getMajors(
             @RequestParam(required = false) String name,
@@ -43,6 +44,7 @@ public class MajorController {
         }
     }
 
+    // API untuk menampilkan informasi Jurusan berdasarkan ID Jurusan
     @GetMapping("/{idMajor}")
     public ResponseEntity getMajorById(@PathVariable String idMajor) {
         DtoMajorResponse majorResponse = majorService.getMajorResponseByIdMajor(idMajor);
@@ -61,6 +63,7 @@ public class MajorController {
         }
     }
 
+    // API untuk menambahkan Jurusan baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addMajor(@RequestBody DtoMajorRequest dtoMajorRequest) {
         DtoMajorResponse majorResponse = majorService.add(dtoMajorRequest);
@@ -79,6 +82,7 @@ public class MajorController {
         }
     }
 
+    // API untuk memperbarui informasi Jurusan berdasarkan request.
     @PutMapping("")
     public ResponseEntity updateMajor(@RequestBody DtoMajorRequest majorRequest) {
         DtoMajorResponse majorResponse = majorService.updateData(majorRequest);
@@ -97,6 +101,7 @@ public class MajorController {
         }
     }
 
+    // API untuk menghapus Jurusan berdasarkan ID Jurusan.
     @DeleteMapping("")
     public ResponseEntity deleteMajor(@RequestBody DtoMajorRequest majorRequest) {
         DtoMajorResponse majorResponse = majorService.delete(majorRequest.getIdMajor());

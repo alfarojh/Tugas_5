@@ -25,6 +25,7 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    // API untuk menampilkan daftar Mata Kuliah berdasarkan request.
     @GetMapping("")
     public ResponseEntity getCourses(
             @RequestParam(required = false) String name,
@@ -52,6 +53,7 @@ public class CourseController {
         }
     }
 
+    // API untuk menampilkan informasi Mata Kuliah berdasarkan ID Mata Kuliah.
     @GetMapping("/{idCourse}")
     public ResponseEntity getCourseById(@PathVariable String idCourse) {
         DtoCourseResponse courseResponse = courseService.getCourseResponseByIdCourse(idCourse);
@@ -70,6 +72,7 @@ public class CourseController {
         }
     }
 
+    // API untuk menambahkan Mata Kuliah baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addCourse(@RequestBody DtoCourseRequest courseRequest) {
         DtoCourseResponse courseResponse = courseService.add(courseRequest);
@@ -88,6 +91,7 @@ public class CourseController {
         }
     }
 
+    // API untuk memperbarui informasi Mata Kuliah berdasarkan request.
     @PutMapping("")
     public ResponseEntity updateCourse(@RequestBody DtoCourseRequest courseRequest) {
         DtoCourseResponse courseResponse = courseService.updateData(courseRequest);
@@ -106,6 +110,7 @@ public class CourseController {
         }
     }
 
+    // API untuk memperbarui status aktif Mata Kuliah berdasarkan request.
     @PatchMapping("")
     public ResponseEntity updateActivated(@RequestBody DtoCourseRequest courseRequest) {
         DtoCourseResponse courseResponse = courseService.updateStatus(courseRequest.getIdCourse(), courseRequest.getActive());
@@ -124,6 +129,7 @@ public class CourseController {
         }
     }
 
+    // API untuk menghapus Mata Kuliah berdasarkan ID Mata Kuliah.
     @DeleteMapping("")
     public ResponseEntity deleteCourse(@RequestBody DtoCourseRequest courseRequest) {
         DtoCourseResponse courseResponse = courseService.delete(courseRequest.getIdCourse());

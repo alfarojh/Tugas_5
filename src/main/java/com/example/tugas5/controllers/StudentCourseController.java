@@ -23,6 +23,7 @@ public class StudentCourseController {
     @Autowired
     private StudentCourseService studentCourseService;
 
+    // API untuk menampilkan daftar relasi Mahasiswa dan Mata Kuliah berdasarkan request.
     @GetMapping("")
     public ResponseEntity getStudentCourses(
             @RequestParam(required = false) String npm,
@@ -49,6 +50,7 @@ public class StudentCourseController {
         }
     }
 
+    // API untuk menampilkan informasi relasi Mahasiswa dan Mata Kuliah berdasarakan ID.
     @GetMapping("/{idStudentCourse}")
     public ResponseEntity getStudentCourseByIdStudentCourse(@PathVariable String idStudentCourse) {
         DtoStudentCourseResponse studentCourseResponse = studentCourseService.getStudentCourseResponseByIdStudentCourse(idStudentCourse);
@@ -67,6 +69,7 @@ public class StudentCourseController {
         }
     }
 
+    // API untuk menambahkan relasi Mahasiswa dan Mata Kuliah baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addStudentCourse(@RequestBody DtoStudentCourseRequest studentCourseRequest) {
         DtoStudentCourseResponse studentCourseResponse = studentCourseService.add(studentCourseRequest);
@@ -85,6 +88,7 @@ public class StudentCourseController {
         }
     }
 
+    // API untuk menghapus relasi Mahasiswa dan Mata Kuliah berdasarkan ID / code.
     @DeleteMapping("")
     public ResponseEntity deleteStudentCourse(@RequestBody DtoStudentCourseRequest studentCourseRequest) {
         DtoStudentCourseResponse studentCourseResponse = studentCourseService.delete(studentCourseRequest.getCode());
