@@ -21,6 +21,7 @@ public class StudentCourse extends BaseModel{
     private Integer credit;     // Jumlah SKS
     @OneToMany (mappedBy = "studentCourse", cascade = CascadeType.PERSIST)
     private List<QuizRecord> quizRecordList;
+    private String grade;
 
     public StudentCourse() {
         // Do Nothing
@@ -71,5 +72,13 @@ public class StudentCourse extends BaseModel{
 
     public void setQuizRecordList(List<QuizRecord> quizRecordList) {
         this.quizRecordList = quizRecordList;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

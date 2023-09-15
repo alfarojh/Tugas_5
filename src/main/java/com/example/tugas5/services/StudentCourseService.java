@@ -1,5 +1,6 @@
 package com.example.tugas5.services;
 
+import com.example.tugas5.utilities.Grade;
 import com.example.tugas5.utilities.Validation;
 import com.example.tugas5.dto.Requests.DtoStudentCourseRequest;
 import com.example.tugas5.dto.Responses.DtoStudentCourseResponse;
@@ -49,6 +50,9 @@ public class StudentCourseService {
         } else if (studentCourseRequest.getIdCourse() == null) {
             message = Validation.message("course_not_insert");
             return null;
+        } else if (studentCourseRequest.getScore() == null) {
+            message = Validation.message("score_not_insert");
+            return null;
         }
 
         Student student = studentService.getStudentByNpm(studentCourseRequest.getNpm());
@@ -63,14 +67,21 @@ public class StudentCourseService {
         } else {
             StudentCourse studentCourse = new StudentCourse();
             List<QuizRecord> quizRecordList = new ArrayList<>();
+            int totalScore = 0;
 
             for (Integer score : studentCourseRequest.getScore()) {
                 if (score < 0 || score > 100) {
                     message = Validation.message("score_invalid");
                     return null;
                 }
+                totalScore += score;
                 quizRecordList.add(new QuizRecord(studentCourse, score));
             }
+
+            int countScore = studentCourseRequest.getScore().size();
+            if (countScore == 0) studentCourse.setGrade(Grade.getGradeForScore(null).name());
+            else studentCourse.setGrade(Grade.getGradeForScore(totalScore/countScore).name());
+
             studentCourse.setIdStudentCourse(getNewId());
             studentCourse.setStudent(student);
             studentCourse.setCourse(course);

@@ -20,6 +20,8 @@ public class DtoStudentCourseResponse {
     private Integer credit;
     @JsonProperty("score")
     private List<Integer> score;
+    @JsonProperty("grade")
+    private String grade;
     @JsonProperty("created_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd:hh-mm-ss")
     private Date createdAt;
@@ -29,11 +31,20 @@ public class DtoStudentCourseResponse {
         this.nameStudent = studentCourse.getStudent().getName();
         this.nameCourse = studentCourse.getCourse().getName();
         this.credit = studentCourse.getCredit();
+        this.grade = studentCourse.getGrade();
         this.createdAt = studentCourse.getCreatedAt();
         score = new ArrayList<>();
         for (QuizRecord quizRecord : studentCourse.getQuizRecordList()) {
             score.add(quizRecord.getScore());
         }
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getNameStudent() {
@@ -58,6 +69,14 @@ public class DtoStudentCourseResponse {
 
     public void setCredit(Integer credit) {
         this.credit = credit;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 
     public Date getCreatedAt() {
