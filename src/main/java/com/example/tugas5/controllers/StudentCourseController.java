@@ -24,12 +24,29 @@ public class StudentCourseController {
     private StudentCourseService studentCourseService;
 
     @GetMapping("")
-    public ResponseEntity getStudentCourses(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(
-                        Validation.message("success"),
-                        studentCourseService.studentCourseResponseList(page, limit)
-                ));
+    public ResponseEntity getStudentCourses(
+            @RequestParam(required = false) String npm,
+            @RequestParam(required = false, name = "id_course") String idCourse,
+            @RequestParam int page, @RequestParam int limit) {
+        if (npm != null && !npm.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            studentCourseService.studentCourseResponseListByNpm(npm.trim(), page, limit)
+                    ));
+        } else if (idCourse != null && !idCourse.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            studentCourseService.studentCourseResponseListByIdCourse(idCourse.trim(), page, limit)
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            studentCourseService.studentCourseResponseList(page, limit)
+                    ));
+        }
     }
 
     @GetMapping("/{idStudentCourse}")

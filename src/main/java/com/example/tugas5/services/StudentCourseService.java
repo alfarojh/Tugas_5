@@ -130,6 +130,28 @@ public class StudentCourseService {
         return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
+    public Page<DtoStudentCourseResponse> studentCourseResponseListByNpm(String npm, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<StudentCourse> result = studentCourseRepository.findAllByStudent_NpmAndIsDeletedIsFalseOrderByCreatedAtDesc(npm, pageable);
+        List<DtoStudentCourseResponse> resultDto = new ArrayList<>();
+
+        for (StudentCourse studentCourse : result.getContent()) {
+            resultDto.add(new DtoStudentCourseResponse(studentCourse));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
+    public Page<DtoStudentCourseResponse> studentCourseResponseListByIdCourse(String idCourse, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<StudentCourse> result = studentCourseRepository.findAllByCourse_IdCourseAndIsDeletedIsFalseOrderByCreatedAtDesc(idCourse, pageable);
+        List<DtoStudentCourseResponse> resultDto = new ArrayList<>();
+
+        for (StudentCourse studentCourse : result.getContent()) {
+            resultDto.add(new DtoStudentCourseResponse(studentCourse));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
     /**
      * Mengembalikan informasi Relasi Mahasiswa dan Mata Kuliah berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
      *

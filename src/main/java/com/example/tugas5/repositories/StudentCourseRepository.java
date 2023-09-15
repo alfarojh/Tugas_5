@@ -12,7 +12,9 @@ import java.util.Optional;
 @Repository
 public interface StudentCourseRepository extends JpaRepository<StudentCourse, Long> {
     List<StudentCourse> findAllByIsDeletedIsFalseOrderByCreatedAtDesc();
-    Page<StudentCourse> findAllByIsDeletedIsFalseOrderByCreatedAtDesc(Pageable pageable);
     Optional<StudentCourse> findFirstByIdStudentCourseAndIsDeletedIsFalse(String idStudentCourse);
     Optional<StudentCourse> findFirstByIdStudentCourseContainingOrderByIdStudentCourseDesc(String idStudentCourse);
+    Page<StudentCourse> findAllByIsDeletedIsFalseOrderByCreatedAtDesc(Pageable pageable);
+    Page<StudentCourse> findAllByStudent_NpmAndIsDeletedIsFalseOrderByCreatedAtDesc(String npm, Pageable pageable);
+    Page<StudentCourse> findAllByCourse_IdCourseAndIsDeletedIsFalseOrderByCreatedAtDesc(String idCourse, Pageable pageable);
 }
