@@ -27,7 +27,7 @@ public class StudentCourseController {
     public ResponseEntity getStudentCourses(@RequestParam int page, @RequestParam int limit) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse(
-                        "All list StudentCourse.",
+                        Validation.message("success"),
                         studentCourseService.studentCourseResponseList(page, limit)
                 ));
     }
