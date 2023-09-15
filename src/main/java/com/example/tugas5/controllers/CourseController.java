@@ -34,7 +34,7 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
                             Validation.message("success"),
-                            courseService.courseResponseListByName(name, page, limit)
+                            courseService.courseResponseListByName(name.trim(), page, limit)
                     ));
 
         } else if (isActive != null) {

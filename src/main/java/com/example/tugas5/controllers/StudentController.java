@@ -36,7 +36,7 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
                             Validation.message("success"),
-                            studentService.studentResponseListByName(name, page, limit)
+                            studentService.studentResponseListByName(name.trim(), page, limit)
                     ));
         } else if (year != null) {
             if (year.length > 1) {
@@ -58,11 +58,11 @@ public class StudentController {
                                 studentService.studentResponseList(page, limit)
                         ));
             }
-        } else if (idMajor != null && !idMajor.isEmpty()) {
+        } else if (idMajor != null && !idMajor.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
                             Validation.message("success"),
-                            studentService.studentResponseListByIdMajor(idMajor, page, limit)
+                            studentService.studentResponseListByIdMajor(idMajor.trim(), page, limit)
                     ));
         } else if (isActive != null) {
             return ResponseEntity.status(HttpStatus.OK).body(

@@ -32,7 +32,7 @@ public class MajorController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
                             Validation.message("success"),
-                            majorService.majorListResponseByName(name, page, limit)
+                            majorService.majorListResponseByName(name.trim(), page, limit)
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(
