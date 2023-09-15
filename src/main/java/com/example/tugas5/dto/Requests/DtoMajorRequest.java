@@ -13,7 +13,7 @@ public class DtoMajorRequest {
     }
 
     public void setIdMajor(String idMajor) {
-        this.idMajor = idMajor.length() == 1 ? "0" + idMajor : idMajor;
+        this.idMajor = idMajor.trim().length() == 1 ? "0" + idMajor.trim() : idMajor.trim();
     }
 
     public String getName() {

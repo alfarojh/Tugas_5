@@ -42,9 +42,6 @@ public class StudentService {
         if (studentRequest.getIdMajor() == null) {
             message = Validation.message("major_not_insert");
             return null;
-        } else if (studentRequest.getNpm() == null) {
-            message = Validation.message("student_not_insert");
-            return null;
         }
 
         Major major = majorService.getMajorById(studentRequest.getIdMajor());
