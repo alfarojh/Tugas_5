@@ -32,9 +32,9 @@ public class StudentCourseController {
                 ));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getStudentCourseById(@PathVariable long id) {
-        DtoStudentCourseResponse studentCourseResponse = studentCourseService.getStudentCourseResponseById(id);
+    @GetMapping("/{idStudentCourse}")
+    public ResponseEntity getStudentCourseByIdStudentCourse(@PathVariable String idStudentCourse) {
+        DtoStudentCourseResponse studentCourseResponse = studentCourseService.getStudentCourseResponseByIdStudentCourse(idStudentCourse);
 
         if (studentCourseResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -68,9 +68,9 @@ public class StudentCourseController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteStudentCourse(@PathVariable Long id) {
-        DtoStudentCourseResponse studentCourseResponse = studentCourseService.delete(id);
+    @DeleteMapping("")
+    public ResponseEntity deleteStudentCourse(@RequestBody DtoStudentCourseRequest studentCourseRequest) {
+        DtoStudentCourseResponse studentCourseResponse = studentCourseService.delete(studentCourseRequest.getCode());
 
         if (studentCourseResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

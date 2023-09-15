@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 public class StudentCourse extends BaseModel{
+    private String idStudentCourse;
     @ManyToOne
     @JoinColumn(name = "id_student", referencedColumnName = "id")
     private Student student;
@@ -16,11 +17,19 @@ public class StudentCourse extends BaseModel{
     @JoinColumn(name = "id_course", referencedColumnName = "id")
     private Course course;
     private Integer credit;     // Jumlah SKS
-    @OneToMany (mappedBy = "studentCourse", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany (mappedBy = "studentCourse", cascade = CascadeType.PERSIST)
     private List<QuizRecord> quizRecordList;
 
     public StudentCourse() {
         // Do Nothing
+    }
+
+    public String getIdStudentCourse() {
+        return idStudentCourse;
+    }
+
+    public void setIdStudentCourse(String idStudentCourse) {
+        this.idStudentCourse = idStudentCourse;
     }
 
     public Student getStudent() {

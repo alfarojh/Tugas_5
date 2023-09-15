@@ -5,12 +5,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class DtoStudentCourseRequest {
+    @JsonProperty("code")
+    private String code;
     @JsonProperty("npm")
     private String npm;
     @JsonProperty("id_course")
     private String idCourse;
     @JsonProperty("score")
     private List<Integer> score;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getNpm() {
         return npm;

@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +71,7 @@ public class StudentCourseService {
                 }
                 quizRecordList.add(new QuizRecord(studentCourse, score));
             }
+            studentCourse.setIdStudentCourse(getNewId());
             studentCourse.setStudent(student);
             studentCourse.setCourse(course);
             studentCourse.setCredit(course.getCredit());
@@ -79,12 +82,12 @@ public class StudentCourseService {
     }
 
 
-    public DtoStudentCourseResponse delete(Long id) {
-        if (id == null) {
+    public DtoStudentCourseResponse delete(String idStudentCourse) {
+        if (idStudentCourse == null) {
             message = Validation.message("student_course_not_insert");
             return null;
         }
-        StudentCourse studentCourse = getStudentCourseById(id);
+        StudentCourse studentCourse = getStudentCourseByIdStudentCourse(idStudentCourse);
 
         if (studentCourse == null) {
             message = Validation.message("student_course_invalid");
@@ -119,15 +122,15 @@ public class StudentCourseService {
     /**
      * Mengembalikan informasi Relasi Mahasiswa dan Mata Kuliah berdasarkan ID Relasi Mahasiswa dan Mata Kuliah.
      *
-     * @param id    ID Relasi Mahasiswa dan Mata Kuliah.
-     * @return      Relasi Mahasiswa dan Mata Kuliah jika tersedia, jika tidak tersedia kembalikan null.
+     * @param idStudentCourse   ID Relasi Mahasiswa dan Mata Kuliah.
+     * @return                  Relasi Mahasiswa dan Mata Kuliah jika tersedia, jika tidak tersedia kembalikan null.
      */
-    public StudentCourse getStudentCourseById(Long id) {
-        if (id == null) {
+    public StudentCourse getStudentCourseByIdStudentCourse(String idStudentCourse) {
+        if (idStudentCourse == null) {
             message = Validation.message("student_course_not_insert");
             return null;
         }
-        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByIdAndIsDeletedIsFalse(id);
+        Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByIdStudentCourseAndIsDeletedIsFalse(idStudentCourse);
 
         if (studentCourseOptional.isPresent()) {
             return studentCourseOptional.get();
@@ -137,10 +140,22 @@ public class StudentCourseService {
         }
     }
 
-    public DtoStudentCourseResponse getStudentCourseResponseById(Long id) {
-        StudentCourse studentCourse = getStudentCourseById(id);
+    public DtoStudentCourseResponse getStudentCourseResponseByIdStudentCourse(String idStudentCourse) {
+        StudentCourse studentCourse = getStudentCourseByIdStudentCourse(idStudentCourse);
 
         if (studentCourse == null) return null;
         else return new DtoStudentCourseResponse(studentCourse);
+    }
+
+    private String getNewId() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        String date = format.format(new Timestamp(System.currentTimeMillis()));
+
+        Optional <StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByIdStudentCourseContainingOrderByIdStudentCourseDesc(date);
+        int count = 1;
+        if (studentCourseOptional.isPresent()) {
+            count = Integer.parseInt(studentCourseOptional.get().getIdStudentCourse().substring(8, 12)) + 1;
+        }
+        return String.format("%s%04d", date, count);
     }
 }

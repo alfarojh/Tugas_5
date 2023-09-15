@@ -10,9 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 public class DtoStudentCourseResponse {
-    @JsonProperty("created_at")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd:hh-mm-ss")
-    private Date createdAt;
+    @JsonProperty("code")
+    private String code;
     @JsonProperty("name_student")
     private String nameStudent;
     @JsonProperty("name_course")
@@ -21,8 +20,12 @@ public class DtoStudentCourseResponse {
     private Integer credit;
     @JsonProperty("score")
     private List<Integer> score;
+    @JsonProperty("created_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd:hh-mm-ss")
+    private Date createdAt;
 
     public DtoStudentCourseResponse(StudentCourse studentCourse) {
+        this.code = studentCourse.getIdStudentCourse();
         this.nameStudent = studentCourse.getStudent().getName();
         this.nameCourse = studentCourse.getCourse().getName();
         this.credit = studentCourse.getCredit();

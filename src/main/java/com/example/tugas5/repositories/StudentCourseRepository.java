@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface StudentCourseRepository extends JpaRepository<StudentCourse, Long> {
     List<StudentCourse> findAllByIsDeletedIsFalseOrderByCreatedAtDesc();
-    Optional<StudentCourse> findFirstByIdAndIsDeletedIsFalse(Long id);
     Page<StudentCourse> findAllByIsDeletedIsFalseOrderByCreatedAtDesc(Pageable pageable);
+    Optional<StudentCourse> findFirstByIdStudentCourseAndIsDeletedIsFalse(String idStudentCourse);
+    Optional<StudentCourse> findFirstByIdStudentCourseContainingOrderByIdStudentCourseDesc(String idStudentCourse);
 }
