@@ -10,10 +10,13 @@ import java.util.Optional;
 
 @Repository
 public interface MajorRepository extends JpaRepository<Major, Long> {
+
     // Mencari Jurusan berdasarkan ID Jurusan.
     Optional<Major> findFirstByIdMajorAndIsDeletedIsFalse(String idMajor);
+
     // Mencari daftar Jurusan.
     Page<Major> findAllByIsDeletedIsFalseOrderByIdMajorAsc(Pageable pageable);
+
     // Mencari daftar Jurusan berdasarkan nama Jurusan.
     Page<Major> findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNameAsc(String name, Pageable pageable);
 }
