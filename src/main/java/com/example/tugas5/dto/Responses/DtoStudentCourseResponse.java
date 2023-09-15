@@ -14,6 +14,8 @@ public class DtoStudentCourseResponse {
     private String code;
     @JsonProperty("name_student")
     private String nameStudent;
+    @JsonProperty("name_major")
+    private String nameMajor;
     @JsonProperty("name_course")
     private String nameCourse;
     @JsonProperty("credit")
@@ -29,6 +31,7 @@ public class DtoStudentCourseResponse {
     public DtoStudentCourseResponse(StudentCourse studentCourse) {
         this.code = studentCourse.getIdStudentCourse();
         this.nameStudent = studentCourse.getStudent().getName();
+        this.nameMajor = studentCourse.getStudent().getMajor().getName();
         this.nameCourse = studentCourse.getCourse().getName();
         this.credit = studentCourse.getCredit();
         this.grade = studentCourse.getGrade();
@@ -53,6 +56,14 @@ public class DtoStudentCourseResponse {
 
     public void setNameStudent(String nameStudent) {
         this.nameStudent = nameStudent;
+    }
+
+    public String getNameMajor() {
+        return nameMajor;
+    }
+
+    public void setNameMajor(String nameMajor) {
+        this.nameMajor = nameMajor;
     }
 
     public String getNameCourse() {
