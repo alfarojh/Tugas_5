@@ -1,6 +1,7 @@
 package com.example.tugas5.models;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 public class StudentCourse extends BaseModel{
+    @Column(unique = true)
     private String idStudentCourse;
     @ManyToOne
     @JoinColumn(name = "id_student", referencedColumnName = "id")
