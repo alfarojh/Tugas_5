@@ -159,6 +159,39 @@ public class StudentService {
         return new PageImpl<>(resultDto, pageable, result.getTotalElements());
     }
 
+    public Page<DtoStudentResponse> studentResponseListByName(String name, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Student> result = studentRepository.findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNpmAsc(name, pageable);
+        List<DtoStudentResponse> resultDto = new ArrayList<>();
+
+        for (Student student : result.getContent()) {
+            resultDto.add(new DtoStudentResponse(student));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
+    public Page<DtoStudentResponse> studentResponseListByYear(Integer startYear, Integer endYear, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Student> result = studentRepository.findAllByYearBetweenAndIsDeletedIsFalseOrderByNpmAsc(startYear, endYear, pageable);
+        List<DtoStudentResponse> resultDto = new ArrayList<>();
+
+        for (Student student : result.getContent()) {
+            resultDto.add(new DtoStudentResponse(student));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
+    public Page<DtoStudentResponse> studentResponseListByActive(Boolean isActive, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Student> result = studentRepository.findAllByIsActiveAndIsDeletedIsFalseOrderByNpmAsc(isActive, pageable);
+        List<DtoStudentResponse> resultDto = new ArrayList<>();
+
+        for (Student student : result.getContent()) {
+            resultDto.add(new DtoStudentResponse(student));
+        }
+        return new PageImpl<>(resultDto, pageable, result.getTotalElements());
+    }
+
     /**
      * Mengembalikan informasi Mahasiswa berdasarkan NPM.
      *

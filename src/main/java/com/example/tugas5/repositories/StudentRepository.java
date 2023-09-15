@@ -15,4 +15,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     Optional<Student> findFirstByNpmAndIsDeletedIsFalse(String npm);
     Optional<Student> findFirstByNpmContainingOrderByNpmDesc(String npm);
     Page<Student> findAllByIsDeletedIsFalseOrderByNpmAsc(Pageable pageable);
+    Page<Student> findAllByNameContainingIgnoreCaseAndIsDeletedIsFalseOrderByNpmAsc(String name, Pageable pageable);
+    Page<Student> findAllByYearBetweenAndIsDeletedIsFalseOrderByNpmAsc(Integer startYear, Integer endYear, Pageable pageable);
+    Page<Student> findAllByIsActiveAndIsDeletedIsFalseOrderByNpmAsc(Boolean isActive, Pageable pageable);
 }

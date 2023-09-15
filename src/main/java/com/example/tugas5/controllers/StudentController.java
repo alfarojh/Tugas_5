@@ -26,12 +26,50 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("")
-    public ResponseEntity getStudents(@RequestParam int page, int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse(
-                        Validation.message("success"),
-                        studentService.studentResponseList(page, limit)
-                ));
+    public ResponseEntity getStudents(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer[] year,
+            @RequestParam(required = false, name = "is_active") Boolean isActive,
+            @RequestParam int page, int limit) {
+        if (name != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            studentService.studentResponseListByName(name, page, limit)
+                    ));
+        } else if (year != null) {
+            if (year.length > 1) {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ApiResponse(
+                                Validation.message("success"),
+                                studentService.studentResponseListByYear(year[0], year[1], page, limit)
+                        ));
+            } else if (year.length == 1){
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ApiResponse(
+                                Validation.message("success"),
+                                studentService.studentResponseListByYear(year[0], year[0], page, limit)
+                        ));
+            } else {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ApiResponse(
+                                Validation.message("success"),
+                                studentService.studentResponseList(page, limit)
+                        ));
+            }
+        } else if (isActive != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            studentService.studentResponseListByActive(isActive, page, limit)
+                    ));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse(
+                            Validation.message("success"),
+                            studentService.studentResponseList(page, limit)
+                    ));
+        }
     }
 
     @GetMapping("/{npm}")
