@@ -1,6 +1,6 @@
 package com.example.tugas5.controllers;
 
-import com.example.tugas5.utilities.utility;
+import com.example.tugas5.utilities.Utility;
 import com.example.tugas5.dto.Requests.DtoMajorRequest;
 import com.example.tugas5.dto.Responses.DtoMajorResponse;
 import com.example.tugas5.models.ApiResponse;
@@ -32,13 +32,13 @@ public class MajorController {
         if (name != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
-                            utility.message("success"),
+                            Utility.message("success"),
                             majorService.majorListResponseByName(name.trim(), page, limit)
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
-                            utility.message("success"),
+                            Utility.message("success"),
                             majorService.majorListResponse(page, limit)
                     ));
         }
@@ -57,7 +57,7 @@ public class MajorController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
-                            utility.message("success"),
+                            Utility.message("success"),
                             majorResponse
                     ));
         }
@@ -76,7 +76,7 @@ public class MajorController {
         } else {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
-                            utility.message("success"),
+                            Utility.message("success"),
                             majorResponse
                     ));
         }
@@ -95,7 +95,7 @@ public class MajorController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
-                            utility.message("success"),
+                            Utility.message("success"),
                             majorResponse
                     ));
         }
@@ -114,7 +114,7 @@ public class MajorController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
-                            utility.message("success"),
+                            Utility.message("success"),
                             majorResponse
                     ));
         }

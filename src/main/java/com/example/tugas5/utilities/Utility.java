@@ -3,7 +3,7 @@ package com.example.tugas5.utilities;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class utility {
+public class Utility {
 
     public static String message(String key) {
         return ResourceBundle.getBundle("messages", Locale.getDefault()).getString(key);

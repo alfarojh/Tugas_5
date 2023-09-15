@@ -1,6 +1,6 @@
 package com.example.tugas5.services;
 
-import com.example.tugas5.utilities.utility;
+import com.example.tugas5.utilities.Utility;
 import com.example.tugas5.dto.Requests.DtoStudentRequest;
 import com.example.tugas5.dto.Responses.DtoStudentResponse;
 import com.example.tugas5.models.Major;
@@ -40,17 +40,17 @@ public class StudentService {
      */
     public DtoStudentResponse add(DtoStudentRequest studentRequest) {
         if (studentRequest.getIdMajor() == null) {
-            message = utility.message("major_not_insert");
+            message = Utility.message("major_not_insert");
             return null;
         }
 
         Major major = majorService.getMajorById(studentRequest.getIdMajor());
 
         if (major == null) {
-            message = utility.message("major_invalid");
+            message = Utility.message("major_invalid");
             return null;
-        } else if (utility.isNameNotValid(studentRequest.getName())) {
-            message = utility.message("name_invalid");
+        } else if (Utility.isNameNotValid(studentRequest.getName())) {
+            message = Utility.message("name_invalid");
             return null;
         } else {
             SimpleDateFormat format = new SimpleDateFormat("yyyy");
@@ -74,16 +74,16 @@ public class StudentService {
      */
     public DtoStudentResponse updateData(DtoStudentRequest studentRequest) {
         if (studentRequest.getNpm() == null) {
-            message = utility.message("student_not_insert");
+            message = Utility.message("student_not_insert");
             return null;
         }
         Student student = getStudentByNpm(studentRequest.getNpm());
 
         if (student == null) {
-            message = utility.message("student_invalid");
+            message = Utility.message("student_invalid");
             return null;
-        } else if (utility.isNameNotValid(studentRequest.getName())) {
-            message = utility.message("name_invalid");
+        } else if (Utility.isNameNotValid(studentRequest.getName())) {
+            message = Utility.message("name_invalid");
             return null;
         } else {
             student.setName(studentRequest.getName());
@@ -94,16 +94,16 @@ public class StudentService {
 
     public DtoStudentResponse updateStatus(String npm, Boolean isActive) {
         if (npm == null) {
-            message = utility.message("student_not_insert");
+            message = Utility.message("student_not_insert");
             return null;
         }
         Student student = getStudentByNpm(npm);
 
         if (student == null) {
-            message = utility.message("student_invalid");
+            message = Utility.message("student_invalid");
             return null;
         } else if (isActive == null) {
-            message = utility.message("active_invalid");
+            message = Utility.message("active_invalid");
             return null;
         } else {
             student.setActive(isActive);
@@ -120,13 +120,13 @@ public class StudentService {
      */
     public DtoStudentResponse delete(String npm) {
         if (npm == null) {
-            message = utility.message("student_not_insert");
+            message = Utility.message("student_not_insert");
             return null;
         }
         Student student = getStudentByNpm(npm);
 
         if (student == null) {
-            message = utility.message("student_invalid");
+            message = Utility.message("student_invalid");
             return null;
         } else {
             student.setDeleted(true);
@@ -213,7 +213,7 @@ public class StudentService {
         if (studentOptional.isPresent()) {
             return studentOptional.get();
         } else {
-            message = utility.message("student_invalid");
+            message = Utility.message("student_invalid");
             return null;
         }
     }
