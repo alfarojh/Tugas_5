@@ -35,12 +35,12 @@ public class CourseService {
      */
     public DtoCourseResponse add(DtoCourseRequest courseRequest) {
         Course course = new Course();
-        System.out.println(Utility.isNameNotValid(courseRequest.getName()));
+        System.out.println(Utility.isNotAlphanumeric(courseRequest.getName()));
 
         if (courseRequest.getIdCourse() != null && !isCourseIdValid(courseRequest.getIdCourse())) {
             message = Utility.message("course_invalid");
             return null;
-        } else if (Utility.isNameNotValid(courseRequest.getName())) {
+        } else if (Utility.isNotAlphanumeric(courseRequest.getName())) {
             message = Utility.message("name_invalid");
             return null;
         } else if (isCreditNotValid(courseRequest.getCredit())) {

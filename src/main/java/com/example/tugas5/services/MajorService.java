@@ -39,7 +39,7 @@ public class MajorService {
         if (majorRequest.getIdMajor() == null || !majorRequest.getIdMajor().matches("\\d+") || getMajorById(majorRequest.getIdMajor()) != null) {
             message = Utility.message("major_invalid");
             return null;
-        } else if (Utility.isNameNotValid(majorRequest.getName())) {
+        } else if (Utility.isNotAlphanumeric(majorRequest.getName())) {
             message = Utility.message("name_invalid");
             return null;
         } else {
@@ -66,7 +66,7 @@ public class MajorService {
         if (major == null) {
             message = Utility.message("major_invalid");
             return null;
-        } else if (Utility.isNameNotValid(majorRequest.getName())) {
+        } else if (Utility.isNotAlphanumeric(majorRequest.getName())) {
             message = Utility.message("name_invalid");
             return null;
         } else {

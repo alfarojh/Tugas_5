@@ -8,6 +8,10 @@ public class DtoStudentResponse {
     private String npm;
     @JsonProperty("name_student")
     private String nameStudent;
+    @JsonProperty("phone_number")
+    private String phoneNumber;
+    @JsonProperty("address")
+    private String address;
     @JsonProperty("name_major")
     private String nameMajor;
     @JsonProperty("is_active")
@@ -17,6 +21,8 @@ public class DtoStudentResponse {
         this.npm = student.getNpm();
         this.nameStudent = student.getName();
         this.nameMajor = student.getMajor().getName();
+        this.phoneNumber = student.getPhoneNumber();
+        this.address = student.getAddress();
         this.isActive = student.isActive();
     }
 
@@ -42,6 +48,22 @@ public class DtoStudentResponse {
 
     public void setNameMajor(String nameMajor) {
         this.nameMajor = nameMajor;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Boolean getIsActive() {

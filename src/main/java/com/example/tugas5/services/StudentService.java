@@ -49,8 +49,14 @@ public class StudentService {
         if (major == null) {
             message = Utility.message("major_invalid");
             return null;
-        } else if (Utility.isNameNotValid(studentRequest.getName())) {
+        } else if (Utility.isNotAlphanumeric(studentRequest.getName())) {
             message = Utility.message("name_invalid");
+            return null;
+        } else if (isPhoneNumberNotValid(studentRequest.getPhoneNumber())) {
+            message = Utility.message("phone_invalid");
+            return null;
+        } else if (Utility.isNotAlphanumeric(studentRequest.getAddress())) {
+            message = Utility.message("address_invalid");
             return null;
         } else {
             SimpleDateFormat format = new SimpleDateFormat("yyyy");
@@ -59,6 +65,8 @@ public class StudentService {
 
             student.setNpm(getNewNPM(year, major.getIdMajor()));
             student.setMajor(major);
+            student.setPhoneNumber(studentRequest.getPhoneNumber());
+            student.setAddress(studentRequest.getAddress());
             student.setYear(year);
             student.setName(studentRequest.getName());
             studentRepository.save(student);
@@ -82,11 +90,19 @@ public class StudentService {
         if (student == null) {
             message = Utility.message("student_invalid");
             return null;
-        } else if (Utility.isNameNotValid(studentRequest.getName())) {
+        } else if (Utility.isNotAlphanumeric(studentRequest.getName())) {
             message = Utility.message("name_invalid");
+            return null;
+        } else if (isPhoneNumberNotValid(studentRequest.getPhoneNumber())) {
+            message = Utility.message("phone_invalid");
+            return null;
+        } else if (Utility.isNotAlphanumeric(studentRequest.getAddress())) {
+            message = Utility.message("address_invalid");
             return null;
         } else {
             student.setName(studentRequest.getName());
+            student.setPhoneNumber(studentRequest.getPhoneNumber());
+            student.setAddress(studentRequest.getAddress());
             studentRepository.save(student);
             return new DtoStudentResponse(student);
         }
@@ -230,5 +246,9 @@ public class StudentService {
             count = Integer.parseInt(studentOptional.get().getNpm().substring(lengthNpm - 4, lengthNpm)) + 1;
         }
         return String.format("%d%s%04d", year, idMajor, count);
+    }
+
+    private boolean isPhoneNumberNotValid(String phoneNumber) {
+        return phoneNumber == null || !phoneNumber.matches("\\d{8,}");
     }
 }
