@@ -136,15 +136,6 @@ public class StudentService {
         }
     }
 
-    /**
-     * Mengembalikan daftar Mahasiswa.
-     *
-     * @return      Daftar Mahasiswa.
-     */
-    public List<Student> studentList() {
-        return studentRepository.findAllByIsDeletedIsFalseOrderByNpmAsc();
-    }
-
     public Page<DtoStudentResponse> studentResponseList(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         Page<Student> result = studentRepository.findAllByIsDeletedIsFalseOrderByNpmAsc(pageable);

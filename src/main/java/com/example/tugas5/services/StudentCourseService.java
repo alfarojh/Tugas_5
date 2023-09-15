@@ -92,7 +92,6 @@ public class StudentCourseService {
         }
     }
 
-
     public DtoStudentCourseResponse delete(String idStudentCourse) {
         if (idStudentCourse == null) {
             message = Utility.message("student_course_not_insert");
@@ -109,14 +108,6 @@ public class StudentCourseService {
             studentCourseRepository.save(studentCourse);
             return new DtoStudentCourseResponse(studentCourse);
         }
-    }
-    /**
-     * Mengembalikan daftar Relasi Mahasiswa dan Mata Kuliah.
-     *
-     * @return      Daftar Relasi Mahasiswa dan Mata Kuliah.
-     */
-    public List<StudentCourse> studentCourseList() {
-        return studentCourseRepository.findAllByIsDeletedIsFalseOrderByCreatedAtDesc();
     }
 
     public Page<DtoStudentCourseResponse> studentCourseResponseList(int page, int limit) {

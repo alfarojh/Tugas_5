@@ -100,15 +100,6 @@ public class MajorService {
         }
     }
 
-    /**
-     * Mengembalikan daftar Jurusan yang masih tersedia.
-     *
-     * @return Daftar Jurusan yang masih tersedia.
-     */
-    public List<Major> majorList() {
-        return majorRepository.findAllByIsDeletedIsFalseOrderByIdMajorAsc();
-    }
-
     public Page<DtoMajorResponse> majorListResponse(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         Page<Major> result = majorRepository.findAllByIsDeletedIsFalseOrderByIdMajorAsc(pageable);

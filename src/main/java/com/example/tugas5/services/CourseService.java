@@ -148,15 +148,6 @@ public class CourseService {
         }
     }
 
-    /**
-     * Mengembalikan daftar Mata Kuliah yang masih tersedia.
-     *
-     * @return Daftar Jurusan yang masih tersedia.
-     */
-    public List<Course> courseList() {
-        return courseRepository.findAllByIsDeletedIsFalseOrderByNameAsc();
-    }
-
     public Page<DtoCourseResponse> courseResponseList(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         Page<Course> result = courseRepository.findAllByIsDeletedIsFalseOrderByNameAsc(pageable);
