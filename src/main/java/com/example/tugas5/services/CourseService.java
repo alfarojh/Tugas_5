@@ -1,6 +1,6 @@
 package com.example.tugas5.services;
 
-import com.example.tugas5.utilities.Validation;
+import com.example.tugas5.utilities.utility;
 import com.example.tugas5.dto.Requests.DtoCourseRequest;
 import com.example.tugas5.dto.Responses.DtoCourseResponse;
 import com.example.tugas5.models.Course;
@@ -35,16 +35,16 @@ public class CourseService {
      */
     public DtoCourseResponse add(DtoCourseRequest courseRequest) {
         Course course = new Course();
-        System.out.println(Validation.isNameNotValid(courseRequest.getName()));
+        System.out.println(utility.isNameNotValid(courseRequest.getName()));
 
         if (courseRequest.getIdCourse() != null && !isCourseIdValid(courseRequest.getIdCourse())) {
-            message = Validation.message("course_invalid");
+            message = utility.message("course_invalid");
             return null;
-        } else if (Validation.isNameNotValid(courseRequest.getName())) {
-            message = Validation.message("name_invalid");
+        } else if (utility.isNameNotValid(courseRequest.getName())) {
+            message = utility.message("name_invalid");
             return null;
         } else if (isCreditNotValid(courseRequest.getCredit())) {
-            message = Validation.message("credit_invalid");
+            message = utility.message("credit_invalid");
             return null;
         } else {
             if (courseRequest.getIdCourse() == null) course.setIdCourse(getNewIdCourse(courseRequest.getName()));
@@ -86,16 +86,16 @@ public class CourseService {
      */
     public DtoCourseResponse updateData(DtoCourseRequest courseRequest) {
         if (courseRequest.getIdCourse() == null) {
-            message = Validation.message("course_not_insert");
+            message = utility.message("course_not_insert");
             return null;
         }
         Course course = getCourseByIdCourse(courseRequest.getIdCourse());
 
         if (course == null) {
-            message = Validation.message("course_invalid");
+            message = utility.message("course_invalid");
             return null;
         } else if (isCreditNotValid(courseRequest.getCredit())) {
-            message = Validation.message("credit_invalid");
+            message = utility.message("credit_invalid");
             return null;
         } else {
             course.setCredit(courseRequest.getCredit());
@@ -106,16 +106,16 @@ public class CourseService {
 
     public DtoCourseResponse updateStatus(String idCourse, Boolean isActive) {
         if (idCourse == null) {
-            message = Validation.message("course_not_insert");
+            message = utility.message("course_not_insert");
             return null;
         }
         Course course = getCourseByIdCourse(idCourse);
 
         if (course == null) {
-            message = Validation.message("course_invalid");
+            message = utility.message("course_invalid");
             return null;
         } else if (isActive == null) {
-            message = Validation.message("active_invalid");
+            message = utility.message("active_invalid");
             return null;
         } else {
             course.setActive(isActive);
@@ -132,13 +132,13 @@ public class CourseService {
      */
     public DtoCourseResponse delete(String idCourse) {
         if (idCourse == null) {
-            message = Validation.message("course_not_insert");
+            message = utility.message("course_not_insert");
             return null;
         }
         Course course = getCourseByIdCourse(idCourse);
 
         if (course == null) {
-            message = Validation.message("course_invalid");
+            message = utility.message("course_invalid");
             return null;
         } else {
             course.setDeleted(true);
@@ -202,7 +202,7 @@ public class CourseService {
         if (courseOptional.isPresent()) {
             return courseOptional.get();
         } else {
-            message = Validation.message("course_invalid");
+            message = utility.message("course_invalid");
             return null;
         }
     }

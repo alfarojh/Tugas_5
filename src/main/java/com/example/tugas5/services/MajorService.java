@@ -1,6 +1,6 @@
 package com.example.tugas5.services;
 
-import com.example.tugas5.utilities.Validation;
+import com.example.tugas5.utilities.utility;
 import com.example.tugas5.dto.Requests.DtoMajorRequest;
 import com.example.tugas5.dto.Responses.DtoMajorResponse;
 import com.example.tugas5.models.Major;
@@ -37,10 +37,10 @@ public class MajorService {
         Major major = new Major();
 
         if (majorRequest.getIdMajor() == null || !majorRequest.getIdMajor().matches("\\d+") || getMajorById(majorRequest.getIdMajor()) != null) {
-            message = Validation.message("major_invalid");
+            message = utility.message("major_invalid");
             return null;
-        } else if (Validation.isNameNotValid(majorRequest.getName())) {
-            message = Validation.message("name_invalid");
+        } else if (utility.isNameNotValid(majorRequest.getName())) {
+            message = utility.message("name_invalid");
             return null;
         } else {
             major.setIdMajor(majorRequest.getIdMajor());
@@ -58,16 +58,16 @@ public class MajorService {
      */
     public DtoMajorResponse updateData(DtoMajorRequest majorRequest) {
         if (majorRequest.getIdMajor() == null) {
-            message = Validation.message("major_not_insert");
+            message = utility.message("major_not_insert");
             return null;
         }
         Major major = getMajorById(majorRequest.getIdMajor());
 
         if (major == null) {
-            message = Validation.message("major_invalid");
+            message = utility.message("major_invalid");
             return null;
-        } else if (Validation.isNameNotValid(majorRequest.getName())) {
-            message = Validation.message("name_invalid");
+        } else if (utility.isNameNotValid(majorRequest.getName())) {
+            message = utility.message("name_invalid");
             return null;
         } else {
             major.setName(majorRequest.getName());
@@ -84,13 +84,13 @@ public class MajorService {
      */
     public DtoMajorResponse delete(String idMajor) {
         if (idMajor == null) {
-            message = Validation.message("major_not_insert");
+            message = utility.message("major_not_insert");
             return null;
         }
         Major major = getMajorById(idMajor);
 
         if (major == null) {
-            message = Validation.message("major_invalid");
+            message = utility.message("major_invalid");
             return null;
         } else {
             major.setDeleted(true);
@@ -141,7 +141,7 @@ public class MajorService {
         if (majorExist.isPresent()) {
             return majorExist.get();
         } else {
-            message = Validation.message("major_invalid");
+            message = utility.message("major_invalid");
             return null;
         }
     }

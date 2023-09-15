@@ -1,6 +1,6 @@
 package com.example.tugas5.controllers;
 
-import com.example.tugas5.utilities.Validation;
+import com.example.tugas5.utilities.utility;
 import com.example.tugas5.dto.Requests.DtoCourseRequest;
 import com.example.tugas5.dto.Responses.DtoCourseResponse;
 import com.example.tugas5.models.ApiResponse;
@@ -34,20 +34,20 @@ public class CourseController {
         if (name != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseService.courseResponseListByName(name.trim(), page, limit)
                     ));
 
         } else if (isActive != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseService.courseResponseListByActive(isActive, page, limit)
                     ));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseService.courseResponseList(page, limit)
                     ));
         }
@@ -66,7 +66,7 @@ public class CourseController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseResponse
                     ));
         }
@@ -85,7 +85,7 @@ public class CourseController {
         } else {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseResponse
                     ));
         }
@@ -104,7 +104,7 @@ public class CourseController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseResponse
                     ));
         }
@@ -123,7 +123,7 @@ public class CourseController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseResponse
                     ));
         }
@@ -142,7 +142,7 @@ public class CourseController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(
-                            Validation.message("success"),
+                            utility.message("success"),
                             courseResponse
                     ));
         }

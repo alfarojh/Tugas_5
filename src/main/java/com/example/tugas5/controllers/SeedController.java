@@ -2,7 +2,7 @@ package com.example.tugas5.controllers;
 
 import com.example.tugas5.models.ApiResponse;
 import com.example.tugas5.seeds.SeedData;
-import com.example.tugas5.utilities.Validation;
+import com.example.tugas5.utilities.utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class SeedController {
         seedData.seed();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse(
-                        Validation.message("success")
+                        utility.message("success")
                 ));
     }
 }

@@ -1,7 +1,7 @@
 package com.example.tugas5.services;
 
 import com.example.tugas5.utilities.Grade;
-import com.example.tugas5.utilities.Validation;
+import com.example.tugas5.utilities.utility;
 import com.example.tugas5.dto.Requests.DtoStudentCourseRequest;
 import com.example.tugas5.dto.Responses.DtoStudentCourseResponse;
 import com.example.tugas5.models.Course;
@@ -45,13 +45,13 @@ public class StudentCourseService {
      */
     public DtoStudentCourseResponse add(DtoStudentCourseRequest studentCourseRequest) {
         if (studentCourseRequest.getNpm() == null) {
-            message = Validation.message("student_not_insert");
+            message = utility.message("student_not_insert");
             return null;
         } else if (studentCourseRequest.getIdCourse() == null) {
-            message = Validation.message("course_not_insert");
+            message = utility.message("course_not_insert");
             return null;
         } else if (studentCourseRequest.getScore() == null) {
-            message = Validation.message("score_not_insert");
+            message = utility.message("score_not_insert");
             return null;
         }
 
@@ -59,10 +59,10 @@ public class StudentCourseService {
         Course course = courseService.getCourseByIdCourse(studentCourseRequest.getIdCourse());
 
         if (student == null) {
-            message = Validation.message("student_invalid");
+            message = utility.message("student_invalid");
             return null;
         } else if (course == null) {
-            message = Validation.message("course_invalid");
+            message = utility.message("course_invalid");
             return null;
         } else {
             StudentCourse studentCourse = new StudentCourse();
@@ -71,7 +71,7 @@ public class StudentCourseService {
 
             for (Integer score : studentCourseRequest.getScore()) {
                 if (score < 0 || score > 100) {
-                    message = Validation.message("score_invalid");
+                    message = utility.message("score_invalid");
                     return null;
                 }
                 totalScore += score;
@@ -95,13 +95,13 @@ public class StudentCourseService {
 
     public DtoStudentCourseResponse delete(String idStudentCourse) {
         if (idStudentCourse == null) {
-            message = Validation.message("student_course_not_insert");
+            message = utility.message("student_course_not_insert");
             return null;
         }
         StudentCourse studentCourse = getStudentCourseByCode(idStudentCourse);
 
         if (studentCourse == null) {
-            message = Validation.message("student_course_invalid");
+            message = utility.message("student_course_invalid");
             return null;
         } else {
             studentCourse.setDeleted(true);
@@ -160,7 +160,7 @@ public class StudentCourseService {
      */
     public StudentCourse getStudentCourseByCode(String code) {
         if (code == null) {
-            message = Validation.message("student_course_not_insert");
+            message = utility.message("student_course_not_insert");
             return null;
         }
         Optional<StudentCourse> studentCourseOptional = studentCourseRepository.findFirstByCodeAndIsDeletedIsFalse(code);
@@ -168,7 +168,7 @@ public class StudentCourseService {
         if (studentCourseOptional.isPresent()) {
             return studentCourseOptional.get();
         } else {
-            message = Validation.message("student_course_invalid");
+            message = utility.message("student_course_invalid");
             return null;
         }
     }
